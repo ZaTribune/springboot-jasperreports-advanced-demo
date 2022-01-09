@@ -18,18 +18,10 @@ public class ReportListField {
     //name of the property on json or pdfRequest
     private String name;
 
-    //title of the property to be displayed on the template helps on headers...etc
-    private String nameEn;
-    private String nameAr;
+    private String description;
 
     public ReportListField(String name) {
         this.name = name;
-    }
-
-    public ReportListField(String name, String nameEn, String nameAr) {
-        this.name = name;
-        this.nameEn = nameEn;
-        this.nameAr = nameAr;
     }
 
     @ManyToOne

@@ -24,7 +24,7 @@ public class TaskConfig {
         executor.setCorePoolSize(20);//starting number of threads
         executor.setMaxPoolSize(40);//maximum number of threads//500
         executor.setQueueCapacity(Integer.MAX_VALUE);//number of blocking tasks to be handled by the thread//max
-        executor.setThreadNamePrefix("DitoThread-");
+        executor.setThreadNamePrefix("CustomizedThread-");
         executor.initialize();
         return executor;
     }

@@ -13,20 +13,22 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-public class ReportImage {
+public class ReportLocale {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String description;
-    private String relativePath;
 
-    public ReportImage(String name, String relativePath) {
-        this.name = name;
-        this.relativePath = relativePath;
-    }
+    private String value;
 
-    @ManyToMany(mappedBy = "images")
+    private String templatePath;
+
+    @ManyToMany(mappedBy = "locales")
     private Set<Report> reports=new HashSet<>(1);
+
+
+    public ReportLocale(String value, String templatePath) {
+        this.value = value;
+        this.templatePath = templatePath;
+    }
 }

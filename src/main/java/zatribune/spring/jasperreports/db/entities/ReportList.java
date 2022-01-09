@@ -19,24 +19,23 @@ public class ReportList {
     private Long id;
     //name of the property on json or pdfRequest
     private String name;
-    //title of the property to be displayed on the template helps on headers...etc
-    private String nameEn;
-    private String nameAr;
+
+    private String description;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "reportList")
     private Set<ReportListField> listFields = new HashSet<>(1);
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "report",referencedColumnName = "id")
     private Report report;
 
     public ReportList(String name) {
         this.name = name;
     }
 
-    public ReportList(String name, String nameEn, String nameAr) {
+    public ReportList(String name, String description) {
         this.name = name;
-        this.nameEn = nameEn;
-        this.nameAr = nameAr;
+        this.description = description;
     }
 
 
@@ -45,12 +44,5 @@ public class ReportList {
         field.setReportList(this);
         listFields.add(field);
     }
-
-    public void addListField(String listFieldName, String nameEn, String nameAr) {
-        ReportListField field = new ReportListField(listFieldName, nameEn, nameAr);
-        field.setReportList(this);
-        listFields.add(field);
-    }
-
 
 }

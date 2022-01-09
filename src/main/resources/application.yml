@@ -4,10 +4,24 @@ server:
     threads:
       max: 1020
 
+
 spring:
   mvc:
     async:
       request-timeout: -1
+  # DB config
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: admin
+    password:
+  # H2 specific
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
 
 jasperreports:
   output-path: "${user.dir}\\pdf-output\\"

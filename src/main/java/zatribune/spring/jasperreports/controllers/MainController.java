@@ -1,46 +1,68 @@
 package zatribune.spring.jasperreports.controllers;
 
 
-import zatribune.spring.jasperreports.errors.UnsupportedLanguageException;
-import zatribune.spring.jasperreports.services.PdfService;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import zatribune.spring.jasperreports.validators.ValidLocale;
+import zatribune.spring.jasperreports.errors.UnsupportedItemException;
+import zatribune.spring.jasperreports.model.GenericResponse;
+import zatribune.spring.jasperreports.model.ReportRequest;
+import zatribune.spring.jasperreports.services.ReportingService;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 public class MainController {
 
 
-    private final PdfService pdfService;
-
-    private static final List<String> supportedLocals = Arrays.asList("en", "ar");
-
-
+    private final ReportingService reportingService;
 
     @Autowired
-    public MainController(PdfService pdfService) {
-        this.pdfService = pdfService;
+    public MainController(ReportingService reportingService) {
+        this.reportingService = reportingService;
     }
 
-    @Async("taskExecutor")
-    @PostMapping(value = "/pdf",produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public CompletableFuture<?> generate(@RequestBody String json,
-                                         @ValidLocale @RequestHeader("Accept-Language") String language
-            , HttpServletResponse response)
-            throws JRException, IOException {
 
-        return CompletableFuture.completedFuture(pdfService.generatePdf(json,response));
+    @Async("taskExecutor")
+    @PostMapping(value = "/pdf", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public CompletableFuture<?> generate(@Valid @RequestBody ReportRequest reportRequest,
+                                         HttpServletResponse response)
+            throws JRException, IOException, UnsupportedItemException {
+
+        log.info("XThread: " + Thread.currentThread().getName());
+        return CompletableFuture.completedFuture(reportingService.generateReport(reportRequest, response));
+    }
+
+    @GetMapping("/notes")
+    public ResponseEntity<GenericResponse> getImplementationNotes() throws IOException {
+
+        List<String> collect;
+        try (BufferedReader buffer = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/static/txt/implementation.txt")))) {
+            collect = buffer.lines()
+                    .collect(Collectors.toList());
+        }
+
+        return ResponseEntity.ok(GenericResponse.builder()
+                .code(2000)
+                .message("Success")
+                .data(collect)
+                .build());
+
     }
 }

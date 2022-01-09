@@ -1,0 +1,2 @@
+Numeric values used on the project are Integer, Double.
+Expected BigDecimal values are rendered as String within jrxml files so whenever you send a value that's expected to be a BigDecimal e.g (amount of money) send it as a string.

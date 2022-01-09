@@ -4,10 +4,11 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
-@Documented
+
 @Constraint(validatedBy = LocaleValidator.class)
-@Target( { ElementType.METHOD, ElementType.FIELD,ElementType.PARAMETER })
+@Target( { ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
+@Documented
 public @interface ValidLocale {
 
     String message() default "Unsupported local.";

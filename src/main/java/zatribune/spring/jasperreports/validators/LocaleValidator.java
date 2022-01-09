@@ -1,20 +1,24 @@
 package zatribune.spring.jasperreports.validators;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import zatribune.spring.jasperreports.config.model.LocaleProperties;
+import zatribune.spring.jasperreports.db.entities.Report;
+import zatribune.spring.jasperreports.db.repositories.ReportRepository;
+import zatribune.spring.jasperreports.errors.BadReportEntryException;
+import zatribune.spring.jasperreports.errors.UnsupportedItemException;
+import zatribune.spring.jasperreports.model.ReportRequest;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class LocaleValidator implements ConstraintValidator<ValidLocale,String> {
+@Slf4j
+public class LocaleValidator implements ConstraintValidator<ValidLocale,ReportRequest> {
 
     @Autowired
-    private LocaleProperties localeProperties;
+    private ReportRepository reportRepository;
 
     @Override
     public void initialize(ValidLocale constraintAnnotation) {
-
-
 
     }
 
@@ -22,8 +26,18 @@ public class LocaleValidator implements ConstraintValidator<ValidLocale,String> 
 //            throw new UnsupportedLanguageException(language, supportedLocals);
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
+    public boolean isValid(ReportRequest request, ConstraintValidatorContext context) {
         //that's it
-        return localeProperties.getLocales().contains(value);
+
+        Report report=reportRepository.findByName(request.getReportName())
+                .orElseThrow(() -> new BadReportEntryException("reportName", "No Report found by the given name."));
+
+               return report.getLocales()
+                .stream()
+                .filter(locale -> locale.getValue().toLowerCase().equals(request.getLocale().toLowerCase()))
+                .findFirst()
+                .orElseThrow(()->new UnsupportedItemException("Locale",request.getLocale(),report.getReportLocalesValues()))!=null;
+
+        //return localeProperties.getLocales().contains(value);
     }
 }

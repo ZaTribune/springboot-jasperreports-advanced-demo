@@ -16,10 +16,10 @@ public class ReportField {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String nameEn;
-    private String nameAr;
+    private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "report",referencedColumnName = "id")
     private Report report;
 
 
@@ -27,9 +27,4 @@ public class ReportField {
         this.name = name;
     }
 
-    public ReportField(String name, String nameEn, String nameAr) {
-        this.name = name;
-        this.nameEn = nameEn;
-        this.nameAr = nameAr;
-    }
 }
