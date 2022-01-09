@@ -1,0 +1,19 @@
+server:
+  port: 8083
+  tomcat:
+    threads:
+      max: 1020
+
+spring:
+  mvc:
+    async:
+      request-timeout: -1
+
+jasperreports:
+  output-path: "${user.dir}\\pdf-output\\"
+
+
+validation:
+  locales:
+    - "Er"
+    - "Ar"
