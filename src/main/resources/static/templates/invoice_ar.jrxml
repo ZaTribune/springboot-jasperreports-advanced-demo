@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
-			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-			  xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
-			  name="invoice"
-			  whenNoDataType="AllSectionsNoDetail"
-			  topMargin="20" bottomMargin="20" uuid="bfad83a2-2872-4536-bfba-4d9cb5451da1">
+<!-- Created with Jaspersoft Studio version 6.14.0.final using JasperReports Library version 6.14.0-2ab0d8625be255bf609c78e1181801213e51db8f  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bfad83a2-2872-4536-bfba-4d9cb5451da1">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
@@ -38,25 +34,25 @@
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
-		<field name="month" />
-		<field name="invoice_date" />
-		<field name="invoice_number" class="java.lang.Integer" />
-		<field name="amount" />
+		<field name="month" class="java.lang.String"/>
+		<field name="invoice_date" class="java.lang.String"/>
+		<field name="invoice_number" class="java.lang.Integer"/>
+		<field name="amount" class="java.lang.String"/>
 		<field name="num_category" class="java.lang.Integer"/>
-		<field name="call_plan" />
-		<field name="payment_date" />
-		<field name="upload_date" />
-		<field name="status" />
+		<field name="call_plan" class="java.lang.String"/>
+		<field name="payment_date" class="java.lang.String"/>
+		<field name="upload_date" class="java.lang.String"/>
+		<field name="status" class="java.lang.String"/>
 	</subDataset>
-	<parameter name="header" />
-	<parameter name="footer" />
-	<parameter name="customer_name" />
-	<parameter name="address" />
-	<parameter name="mobile_number"/>
-	<parameter name="invoice_data" />
+	<parameter name="header" class="java.lang.String"/>
+	<parameter name="footer" class="java.lang.String"/>
+	<parameter name="customer_name" class="java.lang.String"/>
+	<parameter name="address" class="java.lang.String"/>
+	<parameter name="mobile_number" class="java.lang.String"/>
+	<parameter name="invoice_data" class="java.lang.String"/>
 	<parameter name="invoice_number" class="java.lang.Integer"/>
-	<parameter name="amount" />
-	<parameter name="reportName" />
+	<parameter name="amount" class="java.lang.String"/>
+	<parameter name="reportName" class="java.lang.String"/>
 	<parameter name="invoiceDataSource" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<parameter name="logo" class="java.awt.image.BufferedImage"/>
 	<queryString>
@@ -71,7 +67,7 @@
 			<textField>
 				<reportElement x="115" y="50" width="440" height="30" forecolor="#983030" uuid="a7ef6fe6-5607-4a62-8152-347adb3ada3a"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="15"/>
+					<font fontName="DejaVu Sans" size="15"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{reportName}]]></textFieldExpression>
 			</textField>
@@ -106,6 +102,7 @@
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans"/>
 						<paragraph rightIndent="4"/>
 					</textElement>
 					<text><![CDATA[اسم العميل:]]></text>
@@ -129,6 +126,7 @@
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans"/>
 						<paragraph rightIndent="4"/>
 					</textElement>
 					<text><![CDATA[العنوان:]]></text>
@@ -152,6 +150,7 @@
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans"/>
 						<paragraph rightIndent="4"/>
 					</textElement>
 					<text><![CDATA[رقم التليفون:]]></text>
@@ -177,6 +176,7 @@
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans"/>
 						<paragraph rightIndent="4"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{customer_name}]]></textFieldExpression>
@@ -200,6 +200,7 @@
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans"/>
 						<paragraph rightIndent="4"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{address}]]></textFieldExpression>
@@ -223,6 +224,7 @@
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans"/>
 						<paragraph rightIndent="4"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{mobile_number}]]></textFieldExpression>
@@ -246,6 +248,7 @@
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans"/>
 						<paragraph rightIndent="4"/>
 					</textElement>
 					<text><![CDATA[محتوى الفاتورة:]]></text>
@@ -269,6 +272,7 @@
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans"/>
 						<paragraph rightIndent="4"/>
 					</textElement>
 					<text><![CDATA[رقم الفاتورة:]]></text>
@@ -292,6 +296,7 @@
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans"/>
 						<paragraph rightIndent="4"/>
 					</textElement>
 					<text><![CDATA[المبلغ:]]></text>
@@ -315,6 +320,7 @@
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans"/>
 						<paragraph rightIndent="4"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{invoice_data}]]></textFieldExpression>
@@ -338,6 +344,7 @@
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans"/>
 						<paragraph rightIndent="4"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{invoice_number}]]></textFieldExpression>
@@ -361,6 +368,7 @@
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans"/>
 						<paragraph rightIndent="4"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{amount}]]></textFieldExpression>
@@ -383,7 +391,9 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#983030"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$P{header}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -413,6 +423,7 @@
 									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<text><![CDATA[الحالة]]></text>
@@ -422,6 +433,7 @@
 							<textField>
 								<reportElement x="0" y="0" width="62" height="30" uuid="94616952-521b-4735-8c4a-cee886d6161a"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
@@ -437,6 +449,7 @@
 									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<text><![CDATA[تاريخ التحميل]]></text>
@@ -448,6 +461,7 @@
 									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{upload_date}]]></textFieldExpression>
@@ -463,6 +477,7 @@
 									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<text><![CDATA[تاريخ الدفع]]></text>
@@ -474,6 +489,7 @@
 									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{payment_date}]]></textFieldExpression>
@@ -489,6 +505,7 @@
 									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<text><![CDATA[خطة الاتصال]]></text>
@@ -500,6 +517,7 @@
 									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{call_plan}]]></textFieldExpression>
@@ -515,6 +533,7 @@
 									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<text><![CDATA[الفئة]]></text>
@@ -526,6 +545,7 @@
 									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{num_category}]]></textFieldExpression>
@@ -541,6 +561,7 @@
 									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<text><![CDATA[المبلغ]]></text>
@@ -552,6 +573,7 @@
 									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
@@ -567,6 +589,7 @@
 									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<text><![CDATA[رقم الفاتورة]]></text>
@@ -578,6 +601,7 @@
 									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{invoice_number}]]></textFieldExpression>
@@ -593,6 +617,7 @@
 									<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<text><![CDATA[تاريخ الفاتورة]]></text>
@@ -604,6 +629,7 @@
 									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{invoice_date}]]></textFieldExpression>
@@ -620,6 +646,7 @@
 									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans"/>
 									<paragraph rightIndent="4"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{month}]]></textFieldExpression>
@@ -650,12 +677,16 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$P{footer}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="245" y="12" width="310" height="30" uuid="efd03938-e18f-4da8-9293-e14bc3cc355c"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
 				<textFieldExpression><![CDATA["ص رقم "+ $V{PAGE_NUMBER} + " من " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
