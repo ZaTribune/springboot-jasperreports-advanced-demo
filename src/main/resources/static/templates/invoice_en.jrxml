@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.14.0.final using JasperReports Library version 6.14.0-2ab0d8625be255bf609c78e1181801213e51db8f  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bfad83a2-2872-4536-bfba-4d9cb5451da1">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			  xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bfad83a2-2872-4536-bfba-4d9cb5451da1">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
@@ -34,25 +35,25 @@
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
-		<field name="month" class="java.lang.String"/>
-		<field name="invoice_date" class="java.lang.String"/>
+		<field name="month"/>
+		<field name="invoice_date"/>
 		<field name="invoice_number" class="java.lang.Integer"/>
-		<field name="amount" class="java.lang.String"/>
+		<field name="amount"/>
 		<field name="num_category" class="java.lang.Integer"/>
-		<field name="call_plan" class="java.lang.String"/>
-		<field name="payment_date" class="java.lang.String"/>
-		<field name="upload_date" class="java.lang.String"/>
-		<field name="status" class="java.lang.String"/>
+		<field name="call_plan"/>
+		<field name="payment_date"/>
+		<field name="upload_date"/>
+		<field name="status"/>
 	</subDataset>
-	<parameter name="header" class="java.lang.String"/>
-	<parameter name="footer" class="java.lang.String"/>
-	<parameter name="customer_name" class="java.lang.String"/>
-	<parameter name="address" class="java.lang.String"/>
-	<parameter name="mobile_number" class="java.lang.String"/>
-	<parameter name="invoice_data" class="java.lang.String"/>
+	<parameter name="header"/>
+	<parameter name="footer" />
+	<parameter name="customer_name" />
+	<parameter name="address" />
+	<parameter name="mobile_number" />
+	<parameter name="invoice_data" />
 	<parameter name="invoice_number" class="java.lang.Integer"/>
-	<parameter name="amount" class="java.lang.String"/>
-	<parameter name="reportName" class="java.lang.String"/>
+	<parameter name="amount"/>
+	<parameter name="reportName"/>
 	<parameter name="invoiceDataSource" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<parameter name="logo" class="java.awt.image.BufferedImage"/>
 	<queryString>
