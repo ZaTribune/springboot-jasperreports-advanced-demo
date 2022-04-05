@@ -19,4 +19,6 @@ public class ReportRequest {
 
     @NotEmpty(message = "{NotEmpty}")
     private Map<String,Object> data;
+
+    private ReportExportType exportType;
 }

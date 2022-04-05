@@ -1,4 +1,4 @@
-# Reporting [Jasperreports]
+# Reporting [Spring Boot + Jasperreports]
   
 A Demo project for generating PDF reports in Spring Boot using Jasper Reports.  
 
@@ -13,9 +13,14 @@ A Demo project for generating PDF reports in Spring Boot using Jasper Reports.
 </p>  
 
 ## Main Technologies  
-- Java (JDK 8)
-- Jasperreports-6.18.1
+- Java
+- Jasperreports
 - TIBCO Jaspersoft Studio (Community Edition)  
+
+## Features
+- Tested with JMeter against 1000 requests.  
+- Support for LTR & RTL languages.
+- Notes for different workflows created as "**how to**" in order to help users.
 
 ## Steps to deploy
 - Load this project on your preferred IDE e.g. Intellij or Netbeans ...etc and Maven will load all dependencies

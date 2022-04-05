@@ -24,8 +24,16 @@ spring:
     open-in-view: false
 
 jasperreports:
-  output-path: "${user.dir}\\pdf-output\\"
-
+  pdf:
+    report:
+      size-page-to-content: true
+      force-line-break-policy: false
+    export:
+      output-path: "${user.dir}\\pdf-output\\"
+      metadata-author: ZaTribune
+      report-encrypted: true
+      allowed-permissions-hint: PRINTING
+      report-compressed: true
 
 validation:
   locales:

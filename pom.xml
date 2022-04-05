@@ -14,7 +14,7 @@
     <name>Jasperreports</name>
     <description>A Demo project for Creating PDF reports in Spring Boot using Jasperreports.</description>
     <properties>
-        <jasperreports.version>6.18.1</jasperreports.version>
+        <jasperreports.version>6.19.1</jasperreports.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>

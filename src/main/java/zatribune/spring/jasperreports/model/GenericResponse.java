@@ -13,7 +13,7 @@ public class GenericResponse {
     private String message;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Object[] reason;
+    private Object reason;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Object data;

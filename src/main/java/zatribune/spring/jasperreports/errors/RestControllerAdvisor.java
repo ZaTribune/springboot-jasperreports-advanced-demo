@@ -2,7 +2,6 @@ package zatribune.spring.jasperreports.errors;
 
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.fill.JRExpressionEvalException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +15,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import zatribune.spring.jasperreports.model.GenericResponse;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

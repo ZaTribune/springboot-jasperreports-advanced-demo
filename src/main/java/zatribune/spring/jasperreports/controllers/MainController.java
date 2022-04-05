@@ -7,11 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import zatribune.spring.jasperreports.errors.UnsupportedItemException;
 import zatribune.spring.jasperreports.model.GenericResponse;
 import zatribune.spring.jasperreports.model.ReportRequest;
@@ -27,6 +23,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Slf4j
+@RequestMapping("/report")
 @RestController
 public class MainController {
 
@@ -40,29 +37,15 @@ public class MainController {
 
 
     @Async("taskExecutor")
-    @PostMapping(value = "/pdf", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @PostMapping(value = "/pdf", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE,MediaType.APPLICATION_PDF_VALUE})
     public CompletableFuture<?> generate(@Valid @RequestBody ReportRequest reportRequest,
+                                         @RequestHeader(name = "Accept") MediaType accept,
                                          HttpServletResponse response)
             throws JRException, IOException, UnsupportedItemException {
 
         log.info("XThread: " + Thread.currentThread().getName());
-        return CompletableFuture.completedFuture(reportingService.generateReport(reportRequest, response));
+        log.info("{}",accept);
+        return CompletableFuture.completedFuture(reportingService.generateReport(reportRequest,accept, response));
     }
 
-    @GetMapping("/notes")
-    public ResponseEntity<GenericResponse> getImplementationNotes() throws IOException {
-
-        List<String> collect;
-        try (BufferedReader buffer = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/static/txt/implementation.txt")))) {
-            collect = buffer.lines()
-                    .collect(Collectors.toList());
-        }
-
-        return ResponseEntity.ok(GenericResponse.builder()
-                .code(2000)
-                .message("Success")
-                .data(collect)
-                .build());
-
-    }
 }
