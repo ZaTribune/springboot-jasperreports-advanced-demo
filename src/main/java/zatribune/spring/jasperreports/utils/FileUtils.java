@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,9 +17,9 @@ import java.util.stream.Collectors;
 public class FileUtils {
 
 
-    public List<String> fetchTxtLines(String path){
+    public List<String> fetchTxtLines(File file){
         List<String> collect = null;
-        try (BufferedReader bufferedReader = Files.newBufferedReader(Path.of(path), StandardCharsets.UTF_8)){
+        try (BufferedReader bufferedReader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)){
             collect = bufferedReader.lines()
                     .collect(Collectors.toList());
         } catch (IOException e) {

@@ -19,25 +19,20 @@ public class LocaleValidator implements ConstraintValidator<ValidLocale,ReportRe
 
     @Override
     public void initialize(ValidLocale constraintAnnotation) {
-
+        // nothing to be initialized here
     }
-
-//     if (!supportedLocals.contains(language))
-//            throw new UnsupportedLanguageException(language, supportedLocals);
 
     @Override
     public boolean isValid(ReportRequest request, ConstraintValidatorContext context) {
         //that's it
 
-        Report report=reportRepository.findByName(request.getReportName())
-                .orElseThrow(() -> new BadReportEntryException("reportName", "No Report found by the given name."));
+        Report report=reportRepository.findById(request.getReportId())
+                .orElseThrow(() -> new BadReportEntryException("reportName", "No Report found by the given id."));
 
                return report.getLocales()
                 .stream()
-                .filter(locale -> locale.getValue().toLowerCase().equals(request.getLocale().toLowerCase()))
+                .filter(locale -> locale.getValue().equalsIgnoreCase(request.getLocale()))
                 .findFirst()
                 .orElseThrow(()->new UnsupportedItemException("Locale",request.getLocale(),report.getReportLocalesValues()))!=null;
-
-        //return localeProperties.getLocales().contains(value);
     }
 }

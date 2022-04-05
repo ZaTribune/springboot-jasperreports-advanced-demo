@@ -54,9 +54,10 @@ public class ReportingServiceImpl implements ReportingService {
     public ResponseEntity<GenericResponse> generateReport(ReportRequest reportRequest, ReportExportType accept, HttpServletResponse servletResponse)
             throws JRException, IOException, UnsupportedItemException {
         log.info("XThread: " + Thread.currentThread().getName());
+
         //first check for report existence
-        Report report = resourcesLoader.getReportRepository().findByName(reportRequest.getReportName())
-                .orElseThrow(() -> new BadReportEntryException("reportName", "No Report found by the given name."));
+        Report report = resourcesLoader.getReportRepository().findById(reportRequest.getReportId())
+                .orElseThrow(() -> new BadReportEntryException("reportId", "No Report found by the given id."));
 
         //then, check for locale match meaning: (a template that supports the language requested by the user).
         ReportLocale reportLocale = report.getLocales().stream()
@@ -91,7 +92,11 @@ public class ReportingServiceImpl implements ReportingService {
         //filled then injected to the report
         Map<String, Object> parametersMap = new HashMap<>();
 
-        parametersMap.put("reportName",report.getName());
+        final String reportName="reportName";//to be within constants
+        if (inputMap.get(reportName)!=null)//optional feature to change the default title
+            parametersMap.put(reportName,inputMap.get(reportName));
+        else
+            parametersMap.put(reportName,report.getName());
         // first extract lists
         report.getReportLists().parallelStream().forEach(reportList -> {
             // initialize a list for each report list -->to be injected to the JasperReport

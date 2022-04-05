@@ -19,9 +19,9 @@ A Demo project for generating PDF reports in Spring Boot using Jasper Reports.
 
 ## Features
 - Tested with JMeter against 1000 requests.  
-- Support for LTR & RTL languages.
-- Notes for different workflows created as "**how to**" in order to help users.
-
+- Support for LTR & RTL languages; Given English and Arabic as an example with the same workflow except for data input.
+- Notes for different workflows created as "**how to**" in order to help users [in progress].
+- Supported output formats {PDF, XLS, CSV, HTML}.
 ## Steps to deploy
 - Load this project on your preferred IDE e.g. Intellij or Netbeans ...etc and Maven will load all dependencies
   and configure directories.    
@@ -30,8 +30,27 @@ A Demo project for generating PDF reports in Spring Boot using Jasper Reports.
 - To create these templates easily, you'll need to use the Jaspersoft Studio.
 - After exporting your templates from the editor, you can insert them under 
   "resources/static/templates".    
+- You'll have to follow a certain structure/hierarchy for data input, See the following figure:
+
+<img src="samples/overview.svg" height="300"/>
+    
 ## Testing
 - Provided with a testing template, You can use Postman for testing.  
-- Import the collections file "resources/static/test.postman_collection.json" and enjoy.
+- Import the [collections file]("samples/test.postman_collection.json") and enjoy.
+
+## Preview
+<p align="center">
+  <table>
+    <tr>
+      <td><img src="samples/en_Page1.jpg" width="200"/></td>
+      <td><img src="samples/ar_Page1.jpg" width="200"/></td>
+    </tr>
+  </table>
+</p> 
+
+## Authors
+[![Linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white&label=Muhammad%20Ali)](https://linkedin.com/in/zatribune)
+
+
  
  

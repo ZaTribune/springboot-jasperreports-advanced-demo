@@ -5,14 +5,15 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @Getter
 @Setter
 public class ReportRequest {
 
-    @NotBlank(message = "{NotBlank}")
-    private String reportName;
+    @NotNull(message = "{NotNull}")
+    private Long reportId;
 
     @NotBlank(message = "{NotBlank}")
     private String locale;
