@@ -8,8 +8,6 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import zatribune.spring.jasperreports.config.ResourcesLoader;
@@ -18,8 +16,9 @@ import zatribune.spring.jasperreports.db.entities.ReportLocale;
 import zatribune.spring.jasperreports.errors.BadReportEntryException;
 import zatribune.spring.jasperreports.errors.UnsupportedItemException;
 import zatribune.spring.jasperreports.model.GenericResponse;
+import zatribune.spring.jasperreports.model.ReportExportType;
 import zatribune.spring.jasperreports.model.ReportRequest;
-import zatribune.spring.jasperreports.utils.processor.DynamicReportingAutowiredService;
+import zatribune.spring.jasperreports.utils.processor.DynamicOutputProcessorService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,7 +32,7 @@ public class ReportingServiceImpl implements ReportingService {
 
     private final ResourcesLoader resourcesLoader;
 
-    private final DynamicReportingAutowiredService outputProcessor;
+    private final DynamicOutputProcessorService outputProcessor;
 
     /**
      * to export to paths
@@ -46,13 +45,13 @@ public class ReportingServiceImpl implements ReportingService {
      * </code>
      **/
     @Autowired
-    public ReportingServiceImpl(ResourcesLoader resourcesLoader, DynamicReportingAutowiredService outputProcessor) {
+    public ReportingServiceImpl(ResourcesLoader resourcesLoader, DynamicOutputProcessorService outputProcessor) {
         this.resourcesLoader = resourcesLoader;
         this.outputProcessor=outputProcessor;
     }
 
     @Override
-    public ResponseEntity<GenericResponse> generateReport(ReportRequest reportRequest, MediaType accept, HttpServletResponse servletResponse)
+    public ResponseEntity<GenericResponse> generateReport(ReportRequest reportRequest, ReportExportType accept, HttpServletResponse servletResponse)
             throws JRException, IOException, UnsupportedItemException {
         log.info("XThread: " + Thread.currentThread().getName());
         //first check for report existence
@@ -71,15 +70,14 @@ public class ReportingServiceImpl implements ReportingService {
                 , parametersMap
                 , new JREmptyDataSource());
 
-        String fileName = String.format("%s%s", "test", new SimpleDateFormat("yyyyMMddhhmmss'.pdf'").format(new Date()));
+        String fileName = String.format("%s%s", "test", new SimpleDateFormat("yyyyMMddhhmmss'."+accept.toString().toLowerCase()+"'")
+                .format(new Date()));
+
+        log.info("fileName: {}",fileName);
+
         servletResponse.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 
-        if (accept.equals(MediaType.APPLICATION_PDF) || accept.equals(MediaType.ALL)) {
-            servletResponse.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
-        } else {
-            servletResponse.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
-        }
-        outputProcessor.export(reportRequest.getExportType(),jasperPrint, servletResponse.getOutputStream());
+        outputProcessor.export(accept,jasperPrint, servletResponse.getOutputStream());
         return ResponseEntity.ok(GenericResponse.builder()
                 .message("Success")
                 .reason(String.format("file with name %s returned", fileName))
@@ -91,6 +89,7 @@ public class ReportingServiceImpl implements ReportingService {
         //filled then injected to the report
         Map<String, Object> parametersMap = new HashMap<>();
 
+        parametersMap.put("reportName",report.getName());
         // first extract lists
         report.getReportLists().parallelStream().forEach(reportList -> {
             // initialize a list for each report list -->to be injected to the JasperReport

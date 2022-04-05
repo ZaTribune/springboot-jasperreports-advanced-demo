@@ -15,15 +15,19 @@ import java.io.OutputStream;
 @Service
 public class CsvOutputProcessor implements OutputProcessor{
 
+    /**
+     * @<code>
+     *   exporter.setExporterOutput(
+     *          new SimpleWriterExporterOutput ( outputPath + " / test.csv "));
+     * </code>
+     * */
+
     @Override
     public void export(JasperPrint jasperPrint, OutputStream outputStream) throws JRException {
         log.info("{} exporting print: {}",getClass().getSimpleName(),jasperPrint.getName());
         JRCsvExporter exporter = new JRCsvExporter();
 
         exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-
-//        exporter.setExporterOutput(
-//                new SimpleWriterExporterOutput(outputPath + "/" + name + ".csv"));
 
         exporter.setExporterOutput(
                 new SimpleWriterExporterOutput(outputStream));

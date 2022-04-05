@@ -31,7 +31,7 @@ public class RestControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(JRException.class)
-    ResponseEntity<?> handleException(JRException ex) {
+    ResponseEntity<GenericResponse> handleException(JRException ex) {
 
         logger.error(ex.getMessageKey());
         GenericResponse response = GenericResponse.builder()
@@ -44,7 +44,7 @@ public class RestControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UnsupportedItemException.class)
-    ResponseEntity<?> handleException(UnsupportedItemException ex) {
+    ResponseEntity<GenericResponse> handleException(UnsupportedItemException ex) {
 
         logger.error(ex.getMessage());
         GenericResponse response = GenericResponse.builder()
@@ -55,13 +55,12 @@ public class RestControllerAdvisor extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatus status,
                                                                   WebRequest request) {
-
+        logger.error("error");
         List<Object> list = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()

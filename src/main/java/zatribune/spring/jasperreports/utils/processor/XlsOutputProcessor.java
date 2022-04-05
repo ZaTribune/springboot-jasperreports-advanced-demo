@@ -16,16 +16,18 @@ import java.io.OutputStream;
 @Service
 public class XlsOutputProcessor implements OutputProcessor{
 
-    //JasperPrint jasperPrint,String outputPath,String name
-
+/**
+ * @<code>
+ *    exporter.setExporterOutput(
+ *        new SimpleOutputStreamExporterOutput(outputPath + "/" + name + ".xls"));
+ * </code>
+ **/
     @Override
     public void export(JasperPrint jasperPrint, OutputStream outputStream) throws JRException {
         JRXlsxExporter exporter = new JRXlsxExporter();
 
         exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
 
-//        exporter.setExporterOutput(
-//                new SimpleOutputStreamExporterOutput(outputPath + "/" + name + ".xls"));
         exporter.setExporterOutput(
                 new SimpleOutputStreamExporterOutput(outputStream));
 

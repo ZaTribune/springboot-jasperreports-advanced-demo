@@ -10,20 +10,17 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import zatribune.spring.jasperreports.errors.UnsupportedItemException;
 import zatribune.spring.jasperreports.model.GenericResponse;
+import zatribune.spring.jasperreports.model.ReportExportType;
 import zatribune.spring.jasperreports.model.ReportRequest;
 import zatribune.spring.jasperreports.services.ReportingService;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 @Slf4j
-@RequestMapping("/report")
+@RequestMapping("/reporting")
 @RestController
 public class MainController {
 
@@ -37,15 +34,14 @@ public class MainController {
 
 
     @Async("taskExecutor")
-    @PostMapping(value = "/pdf", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE,MediaType.APPLICATION_PDF_VALUE})
-    public CompletableFuture<?> generate(@Valid @RequestBody ReportRequest reportRequest,
-                                         @RequestHeader(name = "Accept") MediaType accept,
+    @PostMapping(value = "/generate/{type}", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE,
+            MediaType.APPLICATION_PDF_VALUE,MediaType.APPLICATION_XML_VALUE,MediaType.TEXT_HTML_VALUE,MediaType.TEXT_PLAIN_VALUE})
+    public CompletableFuture<ResponseEntity<GenericResponse>> generate(@Valid @RequestBody ReportRequest reportRequest,
+                                         @PathVariable(value = "type") ReportExportType type,
                                          HttpServletResponse response)
             throws JRException, IOException, UnsupportedItemException {
-
         log.info("XThread: " + Thread.currentThread().getName());
-        log.info("{}",accept);
-        return CompletableFuture.completedFuture(reportingService.generateReport(reportRequest,accept, response));
+        return CompletableFuture.completedFuture(reportingService.generateReport(reportRequest,type, response));
     }
 
 }

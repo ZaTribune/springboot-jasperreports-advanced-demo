@@ -14,18 +14,17 @@ import java.util.jar.JarException;
 import java.util.stream.Collectors;
 
 @Service
-public class DynamicReportingAutowiredService {
-    private final Map<ReportExportType, OutputProcessor> servicesByCountryCode;
+public class DynamicOutputProcessorService {
+    private final Map<ReportExportType, OutputProcessor> processorServices;
 
     @Autowired
-    public DynamicReportingAutowiredService(List<OutputProcessor> regionServices) {
-        servicesByCountryCode = regionServices.stream()
+    public DynamicOutputProcessorService(List<OutputProcessor> regionServices) {
+        processorServices = regionServices.stream()
                 .collect(Collectors.toMap(OutputProcessor::getExportType, Function.identity()));
     }
 
     public void export(ReportExportType exportType, JasperPrint jasperPrint, OutputStream outputStream) throws JarException, JRException {
-        OutputProcessor service = servicesByCountryCode.get(exportType);
-
+        OutputProcessor service = processorServices.get(exportType);
         service.export(jasperPrint, outputStream);
     }
 }

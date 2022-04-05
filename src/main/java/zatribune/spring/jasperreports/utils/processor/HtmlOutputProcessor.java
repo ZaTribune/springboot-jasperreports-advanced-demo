@@ -16,7 +16,12 @@ import java.io.OutputStream;
 @Service
 public class HtmlOutputProcessor implements OutputProcessor{
 
-
+/**
+ * @<code>
+ *     exporter.setExporterOutput(
+ *        new SimpleHtmlExporterOutput(outputPath + "/" + name + ".html"));
+ * </code>
+ **/
 
     @Override
     public void export(JasperPrint jasperPrint, OutputStream outputStream) throws JRException {
@@ -24,8 +29,7 @@ public class HtmlOutputProcessor implements OutputProcessor{
         HtmlExporter exporter = new HtmlExporter();
 
         exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-//        exporter.setExporterOutput(
-//                new SimpleHtmlExporterOutput(outputPath + "/" + name + ".html"));
+
         exporter.setExporterOutput(
                 new SimpleHtmlExporterOutput(outputStream));
 

@@ -1,12 +1,7 @@
 package zatribune.spring.jasperreports.errors;
 
 
-import zatribune.spring.jasperreports.db.entities.Report;
-import zatribune.spring.jasperreports.db.entities.ReportField;
-import zatribune.spring.jasperreports.db.entities.ReportList;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UnsupportedItemException extends NullPointerException {
 

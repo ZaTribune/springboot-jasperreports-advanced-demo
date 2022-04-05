@@ -23,13 +23,13 @@ spring:
       ddl-auto: create-drop
     open-in-view: false
 
+output-path: "${user.dir}\\pdf-output\\"
 jasperreports:
   pdf:
     report:
       size-page-to-content: true
       force-line-break-policy: false
     export:
-      output-path: "${user.dir}\\pdf-output\\"
       metadata-author: ZaTribune
       report-encrypted: true
       allowed-permissions-hint: PRINTING
