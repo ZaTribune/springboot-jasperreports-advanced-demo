@@ -24,7 +24,6 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 public class MainController {
 
-
     private final ReportingService reportingService;
 
     @Autowired

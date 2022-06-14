@@ -81,10 +81,7 @@ public class ReportingServiceImpl implements ReportingService {
         servletResponse.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 
         outputProcessor.export(accept,jasperPrint, servletResponse.getOutputStream());
-        return ResponseEntity.ok(GenericResponse.builder()
-                .message("Success")
-                .reason(String.format("file with name %s returned", fileName))
-                .build());
+        return ResponseEntity.ok().build();
     }
 
     public Map<String, Object> processReportRequest(Report report, Map<String, Object> inputMap) {

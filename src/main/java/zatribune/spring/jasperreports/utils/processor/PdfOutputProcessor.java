@@ -9,7 +9,6 @@ import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 import net.sf.jasperreports.export.SimplePdfReportConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import zatribune.spring.jasperreports.config.jasperreports.PdfExportConfig;
 import zatribune.spring.jasperreports.config.jasperreports.PdfReportConfig;
@@ -35,6 +34,7 @@ public class PdfOutputProcessor implements OutputProcessor{
     public void export(JasperPrint jasperPrint, OutputStream outputStream) throws JRException {
         log.info("{} exporting print: {}",getClass().getSimpleName(),jasperPrint.getName());
         JRPdfExporter exporter = new JRPdfExporter();
+
         exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
 
         exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
@@ -54,6 +54,7 @@ public class PdfOutputProcessor implements OutputProcessor{
         exportConfig.setCompressed(pdfExportConfig.getReportCompressed());
 
         exporter.setConfiguration(reportConfig);
+        exporter.setConfiguration(exportConfig);
 
         exporter.exportReport();
     }

@@ -39,3 +39,6 @@ validation:
   locales:
     - "Er"
     - "Ar"
+logging:
+  level:
+    web: debug
