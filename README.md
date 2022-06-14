@@ -25,12 +25,14 @@ A Demo project for generating PDF reports in Spring Boot using Jasper Reports.
 ## Steps to deploy
 - Load this project on your preferred IDE e.g. Intellij or Netbeans ...etc and Maven will load all dependencies
   and configure directories.    
-- Every Jasperreports workflow starts with the creation of a template, exported to a jrxml file.
-  This file will be compiled later to a .jasper file later.   
+- Every Jasperreports workflow starts with the creation of a template, exported to a **.jrxml** file.
+  This file will be compiled later (during runtime) to a **.jasper** file.   
 - To create these templates easily, you'll need to use the Jaspersoft Studio.
 - After exporting your templates from the editor, you can insert them under 
   "resources/static/templates".    
-- You'll have to follow a certain structure/hierarchy for data input, See the following figure:
+- In order to support multiple languages/locales per record, you'll have to create a template for each locale.  
+- On this example, I've provided two templates {invoice_en, invoice_ar} representing the two locale implementations of a report called invoice.  
+- You'll have to follow a certain structure/hierarchy for data input. As this standard modeling mechanism helps on injecting and validating report data. See the following figure:
 
 <img src="samples/overview.svg" height="300"/>
     
