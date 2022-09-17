@@ -15,12 +15,12 @@ A Demo project for generating PDF reports in Spring Boot using Jasper Reports.
 - Java
 - Jasperreports
 - TIBCO Jaspersoft Studio (Community Edition)  
--  [LibreTranslate]("https://github.com/LibreTranslate/LibreTranslate") : Free and Open Source Machine Translation API.
+-  **[LibreTranslate]("https://github.com/LibreTranslate/LibreTranslate")** : Free and Open Source Machine Translation API.
 
 ## Features
 - There are two models for generating reports.
-  1. **Pre-modeled** Reports with strict validation and mapping.
-  2. **Direct Filling** models (with translation capability) ~ referred to as **v2**.
+  1. **Pre-modeled** Reports (with strict validation and mapping).
+  2. **Direct Filling** Reports (with translation capability) ~ Also referred to as **v2**.
 - Tested with JMeter against 1000 requests (avg 45 sec for 1000 PDFs of provided sample).  
 - Support for **LTR & RTL** languages; Given English and Arabic as an example with the same workflow except for data input.
 - Notes for different workflows created as "**how to**" in order to help users [in progress].
