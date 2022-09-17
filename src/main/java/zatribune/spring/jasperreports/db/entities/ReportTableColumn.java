@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Entity
-public class ReportListField {
+public class ReportTableColumn {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,10 +20,10 @@ public class ReportListField {
 
     private String description;
 
-    public ReportListField(String name) {
+    public ReportTableColumn(String name) {
         this.name = name;
     }
 
     @ManyToOne
-    private ReportList reportList;
+    private ReportTable reportTable;
 }

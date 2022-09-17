@@ -12,12 +12,12 @@ import java.util.Map;
 @Setter
 public class ReportRequest {
 
-    @NotNull(message = "{NotNull}")
+    @NotNull
     private Long reportId;
 
-    @NotBlank(message = "{NotBlank}")
+    @NotBlank
     private String locale;
 
-    @NotEmpty(message = "{NotEmpty}")
+    @NotEmpty
     private Map<String,Object> data;
 }

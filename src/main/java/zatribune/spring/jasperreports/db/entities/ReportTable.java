@@ -13,7 +13,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-public class ReportList {
+public class ReportTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,27 +22,27 @@ public class ReportList {
 
     private String description;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "reportList")
-    private Set<ReportListField> listFields = new HashSet<>(1);
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "reportTable")
+    private Set<ReportTableColumn> tableColumns = new HashSet<>(1);
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report",referencedColumnName = "id")
     private Report report;
 
-    public ReportList(String name) {
+    public ReportTable(String name) {
         this.name = name;
     }
 
-    public ReportList(String name, String description) {
+    public ReportTable(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
 
     public void addListField(String listFieldName) {
-        ReportListField field = new ReportListField(listFieldName);
-        field.setReportList(this);
-        listFields.add(field);
+        ReportTableColumn field = new ReportTableColumn(listFieldName);
+        field.setReportTable(this);
+        tableColumns.add(field);
     }
 
 }

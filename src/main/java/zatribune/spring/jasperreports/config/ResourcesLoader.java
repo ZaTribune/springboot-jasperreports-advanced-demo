@@ -8,11 +8,12 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import zatribune.spring.jasperreports.db.entities.Report;
 import zatribune.spring.jasperreports.db.entities.ReportImage;
-import zatribune.spring.jasperreports.db.entities.ReportList;
 import zatribune.spring.jasperreports.db.entities.ReportLocale;
+import zatribune.spring.jasperreports.db.entities.ReportTable;
 import zatribune.spring.jasperreports.db.repositories.ReportRepository;
 
 import javax.imageio.ImageIO;
@@ -42,26 +43,26 @@ public class ResourcesLoader implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        initDB();
+        initModel1();
+        initModel2();
         loadReports();
-
     }
 
-    public void initDB() {
+    public void initModel1() {
         Report report = new Report("Auto Debit Recharge Information");
 
-        ReportList reportList = new ReportList("invoiceDataSource");
-        reportList.addListField("month");
-        reportList.addListField("invoice_date");
-        reportList.addListField("invoice_number");
-        reportList.addListField("amount");
-        reportList.addListField("num_category");
-        reportList.addListField("call_plan");
-        reportList.addListField("payment_date");
-        reportList.addListField("upload_date");
-        reportList.addListField("status");
+        ReportTable reportTable = new ReportTable("invoiceDataSource");
+        reportTable.addListField("month");
+        reportTable.addListField("invoice_date");
+        reportTable.addListField("invoice_number");
+        reportTable.addListField("amount");
+        reportTable.addListField("num_category");
+        reportTable.addListField("call_plan");
+        reportTable.addListField("payment_date");
+        reportTable.addListField("upload_date");
+        reportTable.addListField("status");
 
-        report.addReportList(reportList);
+        report.addReportTable(reportTable);
 
         report.addReportField("invoice_data");
         report.addReportField("customer_name");
@@ -79,14 +80,20 @@ public class ResourcesLoader implements CommandLineRunner {
         report.addReportLocale(new ReportLocale("ar", "/static/templates/invoice_ar.jrxml"));
 
         reportRepository.save(report);
+    }
 
+    public void initModel2() {
+        Report report = new Report("Receipt");
+        report.addReportImage(new ReportImage("logo", "/static/images/logo-com.png"));
+        report.addReportLocale(new ReportLocale("ar", "/static/templates/receipt_ar.jrxml"));
+        report.addReportLocale(new ReportLocale("en", "/static/templates/receipt_en.jrxml"));
+        reportRepository.save(report);
     }
 
 
     public void loadReports() {
 
         reportRepository.findAll().forEach(report -> {
-
             //loading the templates
             report.getLocales().forEach(reportLocale -> {
                 try {
@@ -98,21 +105,17 @@ public class ResourcesLoader implements CommandLineRunner {
                 } catch (JRException e) {
                     log.error(e.getMessage());
                 }
-
             });
-
             //then loading images
             report.getImages().forEach(img -> {
                 try {
-                    BufferedImage image = ImageIO.read(getClass().getResourceAsStream(img.getRelativePath()));
+                    BufferedImage image = ImageIO.read(new ClassPathResource(img.getRelativePath()).getInputStream());
                     images.put(img.getId(), image);
                 } catch (IOException e) {
                     log.error(e.getMessage());
                 }
             });
-
         });
     }
-
 
 }

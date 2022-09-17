@@ -27,7 +27,7 @@ public class Report {
     private Set<ReportField> reportFields = new HashSet<>(1);
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "report")
-    private Set<ReportList> reportLists = new HashSet<>(1);
+    private Set<ReportTable> reportTables = new HashSet<>(1);
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     @JoinTable(
@@ -53,9 +53,9 @@ public class Report {
         reportFields.add(field);
     }
 
-    public void addReportList(ReportList list) {
+    public void addReportTable(ReportTable list) {
         list.setReport(this);
-        reportLists.add(list);
+        reportTables.add(list);
     }
 
     public void addReportImage(ReportImage image) {

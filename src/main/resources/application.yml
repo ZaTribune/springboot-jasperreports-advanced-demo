@@ -20,8 +20,9 @@ spring:
       enabled: true
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     open-in-view: false
+    show-sql: true
 
 output-path: "${user.dir}\\pdf-output\\"
 jasperreports:
