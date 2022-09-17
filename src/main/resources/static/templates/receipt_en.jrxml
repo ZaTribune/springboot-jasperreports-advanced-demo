@@ -100,7 +100,7 @@
                 <textElement textAlignment="Center" verticalAlignment="Middle">
                     <font fontName="DejaVu Sans" size="8"/>
                 </textElement>
-                <text><![CDATA[Abu Dhabi Islamic Bank Public Joint Stock Company (ADIB) is licensed by the Central Bank of the UAE.]]></text>
+                <text><![CDATA[The Tribune Company ltd.]]></text>
             </staticText>
         </band>
     </pageFooter>

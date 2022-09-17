@@ -100,7 +100,7 @@
                 <textElement textAlignment="Center" verticalAlignment="Middle">
                     <font fontName="DejaVu Sans" size="8"/>
                 </textElement>
-                <text><![CDATA[مصرف أبوظبي الإسلامي، شركة مساھمة عامة مرخصة من مصرف الإمارات العربیة المتحدة المركزي]]></text>
+                <text><![CDATA[شركة المنبر للبرمجيات وتكنولوجيا المعلومات.]]></text>
             </staticText>
         </band>
     </pageFooter>
