@@ -234,9 +234,7 @@ public class ReportingServiceImpl implements ReportingService {
         //fill empty gaps
         entries.stream()
                 .filter(ReportEntry::isTranslate)
-                .forEach(reportEntry -> {
-                    reportEntry.setKey(s[r.getAndIncrement()].strip());
-                });
+                .forEach(reportEntry -> reportEntry.setKey(s[r.getAndIncrement()].strip()));
     }
 
 
