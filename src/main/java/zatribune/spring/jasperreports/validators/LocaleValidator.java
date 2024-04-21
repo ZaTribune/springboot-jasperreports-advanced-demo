@@ -1,5 +1,7 @@
 package zatribune.spring.jasperreports.validators;
 
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import zatribune.spring.jasperreports.db.entities.Report;
@@ -8,8 +10,7 @@ import zatribune.spring.jasperreports.errors.BadReportEntryException;
 import zatribune.spring.jasperreports.errors.UnsupportedItemException;
 import zatribune.spring.jasperreports.model.ReportRequest;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+
 
 @Slf4j
 public class LocaleValidator implements ConstraintValidator<ValidLocale,ReportRequest> {
@@ -31,7 +32,7 @@ public class LocaleValidator implements ConstraintValidator<ValidLocale,ReportRe
 
                return report.getLocales()
                 .stream()
-                .filter(locale -> locale.getValue().equalsIgnoreCase(request.getLocale()))
+                .filter(locale -> locale.getContent().equalsIgnoreCase(request.getLocale()))
                 .findFirst()
                 .orElseThrow(()->new UnsupportedItemException("Locale",request.getLocale(),report.getReportLocalesValues()))!=null;
     }

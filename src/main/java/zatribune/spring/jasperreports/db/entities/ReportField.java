@@ -1,14 +1,15 @@
 package zatribune.spring.jasperreports.db.entities;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "REPORT_FIELD")
 @Entity
 public class ReportField {
 
@@ -19,7 +20,7 @@ public class ReportField {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "report",referencedColumnName = "id")
+    @JoinColumn(name = "report", referencedColumnName = "id")
     private Report report;
 
 

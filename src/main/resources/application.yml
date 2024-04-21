@@ -43,3 +43,9 @@ validation:
 logging:
   level:
     web: debug
+
+api:
+  libre-translate: https://translate.terraprint.co/translate
+
+system:
+  default-language: en

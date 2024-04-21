@@ -5,13 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "REPORT_TABLE")
 @Entity
 public class ReportTable {
     @Id
@@ -26,7 +28,7 @@ public class ReportTable {
     private Set<ReportTableColumn> tableColumns = new HashSet<>(1);
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "report",referencedColumnName = "id")
+    @JoinColumn(name = "report", referencedColumnName = "id")
     private Report report;
 
     public ReportTable(String name) {

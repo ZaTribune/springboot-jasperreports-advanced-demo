@@ -1,19 +1,22 @@
 package zatribune.spring.jasperreports.db.entities;
 
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "REPORT")
 @Entity
 public class Report {
 
@@ -29,14 +32,14 @@ public class Report {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "report")
     private Set<ReportTable> reportTables = new HashSet<>(1);
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "REPORT_IMAGE_LINKER",
             joinColumns = @JoinColumn(name = "report"),
             inverseJoinColumns = @JoinColumn(name = "image"))
     private Set<ReportImage> images = new HashSet<>(1);
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "REPORT_LOCALE_LINKER",
             joinColumns = @JoinColumn(name = "report"),
@@ -68,8 +71,8 @@ public class Report {
         locales.add(locale);
     }
 
-    public List<String> getReportLocalesValues(){
-        return locales.stream().map(ReportLocale::getValue).collect(Collectors.toList());
+    public List<String> getReportLocalesValues() {
+        return locales.stream().map(ReportLocale::getContent).collect(Collectors.toList());
     }
 
 }

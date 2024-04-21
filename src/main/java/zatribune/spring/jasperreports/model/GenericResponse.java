@@ -2,9 +2,9 @@ package zatribune.spring.jasperreports.model;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
-import javax.validation.constraints.Email;
 
 @Getter
 @Setter

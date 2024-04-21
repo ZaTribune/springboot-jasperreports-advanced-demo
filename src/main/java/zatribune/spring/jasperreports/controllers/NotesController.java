@@ -1,7 +1,8 @@
 package zatribune.spring.jasperreports.controllers;
 
 
-import io.swagger.annotations.Api;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RequestMapping("/notes")
-@Api(tags = "NotesController")
+@Tag(name = "NotesController")
 @RestController
 public class NotesController {
 

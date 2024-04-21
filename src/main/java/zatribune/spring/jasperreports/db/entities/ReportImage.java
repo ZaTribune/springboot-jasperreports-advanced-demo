@@ -1,12 +1,13 @@
 package zatribune.spring.jasperreports.db.entities;
 
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,6 +15,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "REPORT_IMAGE")
 @Entity
 public class ReportImage {
 

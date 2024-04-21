@@ -5,13 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "REPORT_TABLE_COLUMN")
 @Entity
 public class ReportTableColumn {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

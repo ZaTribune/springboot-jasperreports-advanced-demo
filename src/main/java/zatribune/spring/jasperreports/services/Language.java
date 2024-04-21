@@ -1,7 +1,7 @@
 package zatribune.spring.jasperreports.services;
 
 public enum Language {
-    ENGLISH("en"),ARABIC("ar");
+    ENGLISH("en"), ARABIC("ar");
 
     private final String value;
 

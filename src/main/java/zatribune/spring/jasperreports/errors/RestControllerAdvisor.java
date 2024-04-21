@@ -6,7 +6,9 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -57,9 +59,9 @@ public class RestControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatus status,
-                                                                  WebRequest request) {
+                                                                  @NonNull HttpHeaders headers,
+                                                                  @NonNull HttpStatusCode status,
+                                                                  @NonNull WebRequest request) {
         logger.error("error");
         List<Object> list = ex.getBindingResult()
                 .getFieldErrors()
@@ -77,6 +79,5 @@ public class RestControllerAdvisor extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.badRequest().body(response);
     }
-
 
 }
