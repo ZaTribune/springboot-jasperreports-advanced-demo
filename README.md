@@ -55,14 +55,6 @@ Before running this project, ensure you have the following installed:
   visit this [url](https://github.com/LibreTranslate/LibreTranslate/tree/main?tab=readme-ov-file#mirrors) 
   to get a free mirror for LibreTranslate.
 
-## License
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-- Special thanks to the JasperReports community for providing a powerful reporting library.
-- Thanks to the LibreTranslate team for providing a reliable translation service.
-- Gratitude to the Spring Boot team for making it easy to integrate with Spring applications.
-
 ## Testing
 - Provided with two testing templates for both types of models, You can use Postman for testing
   by importing this [collections file]("samples/test.postman_collection.json").
@@ -78,6 +70,14 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
     </tr>
   </reportTable>
 </p> 
+
+## License
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+- Special thanks to the JasperReports community for providing a powerful reporting library.
+- Thanks to the LibreTranslate team for providing a reliable translation service.
+- Gratitude to the Spring Boot team for making it easy to integrate with Spring applications.
 
 ## Authors
 
