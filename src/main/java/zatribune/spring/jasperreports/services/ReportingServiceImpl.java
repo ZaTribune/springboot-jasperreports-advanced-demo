@@ -147,28 +147,15 @@ public class ReportingServiceImpl implements ReportingService {
 
         //step1: get names to be translated
         //todo:merge with map
-        Map<Integer, String> namesToTranslate = new HashMap<>();
-        List<ReportEntry> entries = step1(reportRequest,namesToTranslate,language);
+
+        List<ReportEntry> entries = prepareEntries(reportRequest, language);
+        List<String> namesToTranslate = entries.stream().filter(ReportEntry::isTranslate)
+                .map(ReportEntry::getKey)
+                .toList();
 
         //batch translate:
         if (!namesToTranslate.isEmpty()) {
-            String concatenatedString = String.join(",", namesToTranslate.values());
-            log.info("translation input: {}", concatenatedString);
-            concatenatedString = translator.translate(translator.breakCamel(concatenatedString),
-                    Language.ENGLISH.value(),
-                    language);
-            log.info("translation output: {}", concatenatedString);
-
-            //update a translation list with results
-            String[] s = concatenatedString.split("[,،]");//for LTR & RTL
-            AtomicInteger r = new AtomicInteger(0);
-            namesToTranslate.entrySet().forEach(entry -> {
-                entry.setValue(s[r.getAndIncrement()].strip());
-            });
-
-            entries.stream()
-                    .filter(reportEntry -> namesToTranslate.containsKey(reportEntry.getIndex()))
-                    .forEach(reportEntry -> reportEntry.setKey(namesToTranslate.get(reportEntry.getIndex())));
+            translateEntries(entries, String.join(",", namesToTranslate), language);
         }
 
         ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
@@ -213,8 +200,7 @@ public class ReportingServiceImpl implements ReportingService {
         outputProcessor.export(accept, jasperPrint, servletResponse.getOutputStream());
     }
 
-
-    public List<ReportEntry> step1(ObjectNode reportRequest,Map<Integer, String> namesToTranslate, String language){
+    public List<ReportEntry> prepareEntries(ObjectNode reportRequest, String language) {
         List<ReportEntry> entries = new ArrayList<>();
         AtomicInteger mainIndex = new AtomicInteger(0);
         reportRequest.fields().forEachRemaining(entry -> {
@@ -224,15 +210,33 @@ public class ReportingServiceImpl implements ReportingService {
             name = messageSource.getMessage(entry.getKey(), null, entry.getKey(), Locale.forLanguageTag(language));
 
             if (!language.toLowerCase().equals(defaultLanguage) && name != null && name.equals(entry.getKey())) {
-                namesToTranslate.put(mainIndex.get(), name.strip());
+                en.setTranslate(true);
             }
-
-            en.setIndex(mainIndex.get());
             en.setKey(name);
             en.setValue(entry.getValue().textValue());
             entries.add(en);
         });
         return entries;
+    }
+
+    public void translateEntries(List<ReportEntry> entries, String concatenatedString, String language) {
+
+        log.info("translation input: {}", concatenatedString);
+        concatenatedString = translator.translate(translator.breakCamel(concatenatedString),
+                Language.ENGLISH.value(),
+                language);
+        log.info("translation output: {}", concatenatedString);
+
+        //update a translation list with results
+        String[] s = concatenatedString.split("[,،]");//for LTR & RTL
+
+        AtomicInteger r = new AtomicInteger(0);
+        //fill empty gaps
+        entries.stream()
+                .filter(ReportEntry::isTranslate)
+                .forEach(reportEntry -> {
+                    reportEntry.setKey(s[r.getAndIncrement()].strip());
+                });
     }
 
 
