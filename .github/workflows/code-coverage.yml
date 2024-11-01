@@ -27,12 +27,15 @@ jobs:
       - name: Install xmllint
         run: sudo apt-get install -y libxml2-utils
 
+      - name: Display jacoco.xml contents
+        run: cat target/site/jacoco/jacoco.xml
+
       - name: Extract coverage percentage
         id: extract-coverage
         run: |
-          COVERAGE=$(xmllint --xpath "//*[local-name()='report']/@lineCoverage" target/site/jacoco/jacoco.xml)
+          COVERAGE=$(xmllint --xpath "string(//report/@lineCoverage)" target/site/jacoco/jacoco.xml)
           echo "Coverage Percentage: $COVERAGE"
-          echo "::set-output name=coverage::$COVERAGE"
+          echo "coverage=$COVERAGE" >> $GITHUB_ENV
 
       - name: Update README with Coverage Badge
         run: |
