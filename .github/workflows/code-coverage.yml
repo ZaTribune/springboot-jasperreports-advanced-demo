@@ -24,29 +24,30 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
+      - name: Install xmllint
+        run: sudo apt-get install -y libxml2-utils
+
       - name: Extract coverage percentage
         id: extract-coverage
         run: |
-            COVERAGE=$(grep -oP '(?<=<lineCoverage>)[0-9]+(?=%</lineCoverage>)' target/site/jacoco/jacoco.xml | head -n 1)
-            echo "Coverage Percentage: $COVERAGE"
-            echo "::set-output name=coverage::$COVERAGE"
+          COVERAGE=$(xmllint --xpath "//*[local-name()='report']/@lineCoverage" target/site/jacoco/jacoco.xml)
+          echo "Coverage Percentage: $COVERAGE"
+          echo "::set-output name=coverage::$COVERAGE"
 
       - name: Update README with Coverage Badge
         run: |
-                COVERAGE=${{ steps.extract-coverage.outputs.coverage }}
-                echo "Updating README with coverage badge..."
-                BADGE_URL="https://img.shields.io/badge/coverage-${COVERAGE}%25-green"
-                sed -i "s|https://img.shields.io/badge/coverage-.*-green|$BADGE_URL|g" README.md
-                git config --local user.name "github-actions"
-                git config --local user.email "github-actions@github.com"
-                git commit -am "Update coverage badge to $COVERAGE%"
-                git push
+          COVERAGE=${{ steps.extract-coverage.outputs.coverage }}
+          echo "Updating README with coverage badge..."
+          BADGE_URL="https://img.shields.io/badge/coverage-${COVERAGE}%25-green"
+          sed -i "s|https://img.shields.io/badge/coverage-.*-green|$BADGE_URL|g" README.md
+          git config --local user.name "github-actions"
+          git config --local user.email "github-actions@github.com"
+          
+          # Create a new branch for the changes
+          git checkout -b update-coverage-badge
+          git add README.md
+          git commit -m "Update coverage badge to $COVERAGE%"
+          git push --set-upstream origin update-coverage-badge
 
-      - name: Commit updated README
-        if: steps.extract-coverage.outputs.coverage != ''
-        run: |
-                git add README.md
-                git commit -m "Update coverage badge"
-                git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
