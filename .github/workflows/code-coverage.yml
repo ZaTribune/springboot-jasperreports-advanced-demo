@@ -4,13 +4,11 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
 
 jobs:
-  code-coverage:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -19,28 +17,28 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'temurin'  # Specify the Java distribution here
 
       - name: Build with Maven
         run: mvn clean install
 
-      - name: Install xmllint
-        run: sudo apt-get install -y libxml2-utils
-
-      - name: Display jacoco.xml contents
-        run: cat target/site/jacoco/jacoco.xml
+      - name: Run tests with coverage
+        run: mvn test jacoco:report
 
       - name: Extract coverage percentage
-        id: extract-coverage
+        id: coverage
         run: |
-          COVERAGE=$(xmllint --xpath "string(//report/@lineCoverage)" target/site/jacoco/jacoco.xml)
+          COVERAGE=$(xmllint --xpath "//*[local-name()='report']/@lineCoverage" target/site/jacoco/jacoco.xml)
           echo "Coverage Percentage: $COVERAGE"
-          echo "coverage=$COVERAGE" >> $GITHUB_ENV
+          echo "::set-output name=coverage::$COVERAGE"
 
-      - name: Update README with Coverage Badge
+      - name: Update coverage badge in README
         run: |
-          COVERAGE=${{ steps.extract-coverage.outputs.coverage }}
+          COVERAGE="${{ steps.coverage.outputs.coverage }}"
           echo "Updating README with coverage badge..."
+          if [[ "$COVERAGE" == "" ]]; then
+            echo "No coverage data found."
+            exit 1
+          fi
           BADGE_URL="https://img.shields.io/badge/coverage-${COVERAGE}%25-green"
           sed -i "s|https://img.shields.io/badge/coverage-.*-green|$BADGE_URL|g" README.md
           git config --local user.name "github-actions"
@@ -48,9 +46,18 @@ jobs:
           
           # Create a new branch for the changes
           git checkout -b update-coverage-badge
+          
+          # Pull latest changes from the remote branch
+          git pull origin update-coverage-badge --rebase || true # Allow failure if the branch doesn't exist yet
+          
+          # Add the README.md changes
           git add README.md
+          
+          # Commit the changes
           git commit -m "Update coverage badge to $COVERAGE%"
-          git push --set-upstream origin update-coverage-badge
+          
+          # Push the changes
+          git push --set-upstream origin update-coverage-badge || echo "Push failed"
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
