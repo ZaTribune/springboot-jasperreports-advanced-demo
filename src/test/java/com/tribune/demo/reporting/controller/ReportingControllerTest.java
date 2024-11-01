@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class ReportingControllerTest {
+class ReportingControllerTest {
 
     @Mock
     ReportingService reportingService;

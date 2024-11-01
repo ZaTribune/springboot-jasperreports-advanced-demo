@@ -31,7 +31,7 @@ jobs:
         uses: cicirello/jacoco-badge-generator@v2
         with:
           jacoco-csv-file: target/site/jacoco/jacoco.csv
-          badge-output-file: coverage-badge.svg
+          badge-output-file: samples/spring.svg
 
       - name: Commit coverage badge
         run: |
