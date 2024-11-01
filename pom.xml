@@ -13,6 +13,12 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Jasperreports</name>
     <description>A Demo project for creating PDF reports in Spring-Boot using Jasperreports.</description>
+    <developers>
+        <developer>
+            <name>Muhammad Ali</name>
+            <email>muhammadali40k@gmail.com</email>
+        </developer>
+    </developers>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
