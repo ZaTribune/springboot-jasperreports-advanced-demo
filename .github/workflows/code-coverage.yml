@@ -20,14 +20,22 @@ jobs:
         with:
           java-version: '11'
 
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Build with Maven
+        run: mvn clean install
 
       - name: Generate Jacoco Report
-        run: ./gradlew jacocoTestReport
+        run: mvn jacoco:report
 
       - name: Upload coverage badge
         uses: cicirello/jacoco-badge-generator@v2
         with:
-          jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
+          jacoco-csv-file: target/site/jacoco/jacoco.csv
           badge-output-file: coverage-badge.svg
+
+      - name: Commit coverage badge
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add coverage-badge.svg
+          git commit -m 'Update code coverage badge'
+          git push
