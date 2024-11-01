@@ -3,68 +3,45 @@ name: Code Coverage
 on:
   push:
     branches:
-      - master
-  pull_request:
-    branches:
-      - master
+      - main  # Change to your default branch
 
 jobs:
-  code-coverage:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '17'
-          distribution: 'temurin'  # Specify the Java distribution here
+          java-version: '17'  # Change this to your JDK version
+          distribution: 'adopt'
 
       - name: Build with Maven
-        run: mvn clean install
+        run: mvn clean test
 
-      - name: Install xmllint
-        run: sudo apt-get install -y libxml2-utils
-
-      - name: Display jacoco.xml contents
-        run: cat target/site/jacoco/jacoco.xml
-
-      - name: Extract coverage percentage
-        id: extract-coverage
+      - name: Generate Coverage Badge
         run: |
-          COVERAGE=$(xmllint --xpath "string(//report/@lineCoverage)" target/site/jacoco/jacoco.xml)
-          echo "Coverage Percentage: $COVERAGE"
-          echo "coverage=$COVERAGE" >> $GITHUB_ENV
+          # Path to your JaCoCo XML report
+          report="target/site/jacoco/jacoco.xml"  # For Maven
+          
+          # Extract coverage percentage from JaCoCo report
+          coverage=$(grep -oP '(?<=linecoverage=")[0-9]+(\.[0-9]+)?' "$report")
+          
+          # Create a badge Markdown text
+          badge="[![Coverage](https://img.shields.io/badge/coverage-${coverage}%25-brightgreen.svg)](https://github.com/zatribune/springboot-jasperreports-advanced-demo)"
+          
+          # Write the badge to a markdown file
+          echo "$badge" > coverage-badge.md
 
-      - name: Update coverage badge in README
+      - name: Commit and push changes
         run: |
-          COVERAGE=${{ env.coverage }} # Use the coverage value extracted earlier
-          echo "Updating README with coverage badge..."
-          if [[ "$COVERAGE" == "" ]]; then
-            echo "No coverage data found."
-            exit 1
-          fi
-          BADGE_URL="https://img.shields.io/badge/coverage-${COVERAGE}%25-green"
-          sed -i "s|https://img.shields.io/badge/coverage-.*-green|$BADGE_URL|g" README.md
-          git config --local user.name "github-actions"
-          git config --local user.email "github-actions@github.com"
-          
-          # Create a new branch for the changes
-          git checkout -b update-coverage-badge
-          
-          # Pull latest changes from the remote branch
-          git pull origin update-coverage-badge --rebase
-          
-          # Add the README.md changes
-          git add README.md
-          
-          # Commit the changes
-          git commit -m "Update coverage badge to $COVERAGE%"
-          
-          # Push the changes
-          git push --set-upstream origin update-coverage-badge
-
-
+          git config --local user.email "you@example.com"  # Change to your email
+          git config --local user.name "Your Name"  # Change to your name
+          git add coverage-badge.md
+          git commit -m "Update coverage badge" || echo "No changes to commit"
+          git push origin main  # Change to your default branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
