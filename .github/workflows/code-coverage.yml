@@ -24,22 +24,29 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
-      - name: Generate Jacoco Report
-        run: mvn jacoco:report
-
-      - name: Upload coverage badge
-        uses: cicirello/jacoco-badge-generator@v2
-        with:
-          jacoco-csv-file: target/site/jacoco/jacoco.csv
-          badge-output-file: samples/spring.svg
-
-      - name: Commit coverage badge
+      - name: Extract coverage percentage
+        id: extract-coverage
         run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
-          git add coverage-badge.svg
-          git commit -m 'Update code coverage badge'
-          git push
-      # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+            COVERAGE=$(grep -oP '(?<=<lineCoverage>)[0-9]+(?=%</lineCoverage>)' target/site/jacoco/jacoco.xml | head -n 1)
+            echo "Coverage Percentage: $COVERAGE"
+            echo "::set-output name=coverage::$COVERAGE"
+
+      - name: Update README with Coverage Badge
+        run: |
+                COVERAGE=${{ steps.extract-coverage.outputs.coverage }}
+                echo "Updating README with coverage badge..."
+                BADGE_URL="https://img.shields.io/badge/coverage-${COVERAGE}%25-green"
+                sed -i "s|https://img.shields.io/badge/coverage-.*-green|$BADGE_URL|g" README.md
+                git config --local user.name "github-actions"
+                git config --local user.email "github-actions@github.com"
+                git commit -am "Update coverage badge to $COVERAGE%"
+                git push
+
+      - name: Commit updated README
+        if: steps.extract-coverage.outputs.coverage != ''
+        run: |
+                git add README.md
+                git commit -m "Update coverage badge"
+                git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
