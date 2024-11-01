@@ -39,7 +39,7 @@ jobs:
 
       - name: Update coverage badge in README
         run: |
-          COVERAGE="${{ steps.coverage.outputs.coverage }}"
+          COVERAGE=${{ env.coverage }} # Use the coverage value extracted earlier
           echo "Updating README with coverage badge..."
           if [[ "$COVERAGE" == "" ]]; then
             echo "No coverage data found."
@@ -54,7 +54,7 @@ jobs:
           git checkout -b update-coverage-badge
           
           # Pull latest changes from the remote branch
-          git pull origin update-coverage-badge --rebase || true # Allow failure if the branch doesn't exist yet
+          git pull origin update-coverage-badge --rebase
           
           # Add the README.md changes
           git add README.md
@@ -63,7 +63,7 @@ jobs:
           git commit -m "Update coverage badge to $COVERAGE%"
           
           # Push the changes
-          git push --set-upstream origin update-coverage-badge || echo "Push failed"
+          git push --set-upstream origin update-coverage-badge
 
 
         env:
