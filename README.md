@@ -4,7 +4,7 @@
   <h2>SpringBoot Reporting Service</h2>
   <p>A demo project for generating Reports (XLS, PDFs, and so on) using JasperReports & SpringBoot.</p>
 
- ![Coverage Badge](Coverage: 0%)
+![Coverage](https://img.shields.io/badge/coverage-0%25-green)
 </div>
 
 ## Prerequisites
