@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
-@ConfigurationPropertiesScan("zatribune.spring.jasperreports.config")
+@ConfigurationPropertiesScan("com.tribune.demo.reporting.config")
 @SpringBootApplication
 public class ReportingApplication {
 

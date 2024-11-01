@@ -40,3 +40,6 @@ jobs:
           git add coverage-badge.svg
           git commit -m 'Update code coverage badge'
           git push
+      # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

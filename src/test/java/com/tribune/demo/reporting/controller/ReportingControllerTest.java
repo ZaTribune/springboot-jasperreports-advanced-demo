@@ -45,13 +45,13 @@ public class ReportingControllerTest {
     ReportExportType EXPORT_TYPE = ReportExportType.PDF;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         reportRequest = new ReportRequest();
         reportRequestJson = JsonNodeFactory.instance.objectNode();
     }
 
     @Test
-    public void testGenerateV1Success() throws Exception {
+    void testGenerateV1Success() throws Exception {
 
         doNothing().when(reportingService).generateFromModel(reportRequest, EXPORT_TYPE, response);
 
@@ -62,7 +62,7 @@ public class ReportingControllerTest {
     }
 
     @Test
-    public void testGenerateV1Exception() throws Exception {
+    void testGenerateV1Exception() throws Exception {
 
         doThrow(new IOException("Something wrong happened!")).when(reportingService)
                 .generateFromModel(reportRequest, EXPORT_TYPE, response);
@@ -82,7 +82,7 @@ public class ReportingControllerTest {
 
 
     @Test
-    public void testGenerateV2Success() throws Exception {
+    void testGenerateV2Success() throws Exception {
 
         doNothing().when(reportingService).generateDirect(reportRequestJson, REPORT_TITLE, LANGUAGE, EXPORT_TYPE, response);
 
@@ -94,7 +94,7 @@ public class ReportingControllerTest {
     }
 
     @Test
-    public void testGenerateV2Exception() throws Exception {
+    void testGenerateV2Exception() throws Exception {
 
         doThrow(new IOException("Something wrong happened!")).when(reportingService)
                 .generateDirect(reportRequestJson, REPORT_TITLE, LANGUAGE, EXPORT_TYPE, response);

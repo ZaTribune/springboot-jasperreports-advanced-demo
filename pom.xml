@@ -8,10 +8,10 @@
         <version>3.2.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>zatribune.spring</groupId>
-    <artifactId>jasperreports</artifactId>
+    <groupId>com.tribune.demo</groupId>
+    <artifactId>reporting-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Jasperreports</name>
+    <name>reporting-service</name>
     <description>A Demo project for creating PDF reports in Spring-Boot using Jasperreports.</description>
     <developers>
         <developer>
