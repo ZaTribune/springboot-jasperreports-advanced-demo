@@ -2,41 +2,32 @@ name: Code Coverage
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
   pull_request:
-    branches: [master]
+    branches:
+      - master
 
 jobs:
-  test-and-report:
+  code-coverage:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Check out repository
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up JDK 11
-      uses: actions/setup-java@v2
-      with:
-        java-version: '11'
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
 
-    - name: Install dependencies and run tests with JaCoCo
-      run: mvn clean test jacoco:report
+      - name: Build with Gradle
+        run: ./gradlew build
 
-    - name: Generate coverage badge
-      uses: cicirello/jacoco-badge-generator@v3
-      with:
-        jacoco-csv-file: target/site/jacoco/jacoco.csv
-        output: README.md
-        badge-template: "Coverage: {PERCENT}%"
-    
-    - name: Commit coverage badge
-      run: |
-        git config --global user.name 'github-actions'
-        git config --global user.email 'github-actions@github.com'
-        git add README.md
-        git commit -m "Update coverage badge in README"
-      continue-on-error: true  # Allow no changes to continue
+      - name: Generate Jacoco Report
+        run: ./gradlew jacocoTestReport
 
-    - name: Push changes
-      run: git push
-      if: success()
+      - name: Upload coverage badge
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
+          badge-output-file: coverage-badge.svg
