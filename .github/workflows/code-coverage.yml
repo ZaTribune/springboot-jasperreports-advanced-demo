@@ -7,10 +7,10 @@ on:
   pull_request:
     branches:
       - master
-jobs:
-  build:
-    runs-on: ubuntu-latest
 
+jobs:
+  code-coverage:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'temurin'
+          distribution: 'temurin'  # Specify the Java distribution here
 
       - name: Build with Maven
         run: mvn clean install
@@ -27,18 +27,15 @@ jobs:
       - name: Install xmllint
         run: sudo apt-get install -y libxml2-utils
 
-      - name: Run tests with coverage
-        run: mvn test jacoco:report
-
       - name: Display jacoco.xml contents
         run: cat target/site/jacoco/jacoco.xml
 
       - name: Extract coverage percentage
-        id: coverage
+        id: extract-coverage
         run: |
-          COVERAGE=$(xmllint --xpath "//*[local-name()='report']/@lineCoverage" target/site/jacoco/jacoco.xml)
+          COVERAGE=$(xmllint --xpath "string(//report/@lineCoverage)" target/site/jacoco/jacoco.xml)
           echo "Coverage Percentage: $COVERAGE"
-          echo "::set-output name=coverage::$COVERAGE"
+          echo "coverage=$COVERAGE" >> $GITHUB_ENV
 
       - name: Update coverage badge in README
         run: |
@@ -67,6 +64,7 @@ jobs:
           
           # Push the changes
           git push --set-upstream origin update-coverage-badge || echo "Push failed"
+
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
