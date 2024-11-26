@@ -1,5 +1,8 @@
 <div align="center" style="margin-top: 20px">
-  <img src="samples/spring.svg" height="100" alt="spring"/>
+  <img src="samples/spring.svg" width="20%" alt="spring"/>
+  <br/>
+  <img src="samples/plus.svg" width="5%" style="margin-top: 10px" alt="spring"/>
+  <br/>
   <img src="samples/jasper-reports.png" width="417" alt="jasperreports"/>
   <h2>SpringBoot Reporting Service</h2>
   <p>A demo project for generating Reports (XLS, PDFs, and so on) using JasperReports & SpringBoot.</p>
