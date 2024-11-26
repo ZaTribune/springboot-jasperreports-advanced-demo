@@ -1,6 +1,7 @@
 package com.tribune.demo.reporting.util.translator;
 
 public interface Translator {
+
     String translate(String textToTranslate, String from, String to);
 
     default String breakCamel(String content) {

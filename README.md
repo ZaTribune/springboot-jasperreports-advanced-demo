@@ -7,19 +7,11 @@
 [![codecov](https://codecov.io/gh/zatribune/springboot-jasperreports-advanced-demo/graph/badge.svg?token=STPROBEOTZ)](https://codecov.io/gh/zatribune/springboot-jasperreports-advanced-demo)
 </div>
 
-## Prerequisites
+## Built with
 
-Before running this project, ensure you have the following installed:
-
-- Java Development Kit (JDK) version 17 or later.
-- Apache Maven
-- Your favorite IDE (e.g., IntelliJ IDEA, Eclipse)
-
-## Main Technologies
-
-- Java
-- Jasperreports
-- TIBCO Jaspersoft Studio (Community Edition)
+- Java (JDK 17 or later).
+- Jasperreports.
+- TIBCO Jaspersoft Studio (Community Edition).
 - **[LibreTranslate]("https://github.com/LibreTranslate/LibreTranslate")** : Free and Open Source Machine Translation
   API.
 

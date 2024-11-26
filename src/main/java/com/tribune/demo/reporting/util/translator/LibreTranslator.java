@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -20,7 +21,7 @@ import java.util.regex.Pattern;
 public class LibreTranslator implements Translator {
 
     @Value("${api.libre-translate}")
-    private String libreTranslate;
+    private String url;
 
     //a pattern to check weather a word wasn't translated from translator server
     private final Pattern p = Pattern.compile(".[a-zA-Z]");
@@ -55,7 +56,8 @@ public class LibreTranslator implements Translator {
         log.info("Translating text [{}] to [{}]", textToTranslate, to);
         TranslateResponse response = WebClient.builder().build()
                 .post()
-                .uri(libreTranslate)
+                .uri(url)
+                .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(TranslateRequest.builder()
                         .q("\t" + textToTranslate)//to fix the first word issue when not translated
                         .source(from.toLowerCase())
@@ -64,10 +66,14 @@ public class LibreTranslator implements Translator {
                 .exchangeToMono(clientResponse ->
                         clientResponse.bodyToMono(TranslateResponse.class)
                 )
-                .onErrorResume(t -> Mono.just(TranslateResponse.builder()
-                        .translatedText(textToTranslate)
-                        .build()))
                 .timeout(Duration.ofSeconds(3))
+                .doOnError(t->                log.error("Error occurred while translating text [{}] to [{}]", textToTranslate, to, t))
+                .onErrorReturn(
+                    TranslateResponse.builder()
+                            .translatedText(textToTranslate)
+                            .build()
+                )
+
                 .block();
         if (response != null) {
             return response.getTranslatedText();

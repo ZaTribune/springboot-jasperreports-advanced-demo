@@ -63,6 +63,12 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>mockwebserver</artifactId>
+            <version>5.0.0-alpha.12</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
@@ -161,6 +167,16 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*Config.class</exclude>
+                        <exclude>**/*Application.class</exclude>
+                        <exclude>**/*Exception.class</exclude>
+                        <exclude>**/*Properties.class</exclude>
+                        <exclude>**/*com/tribune/demo/reporting/model/**/*</exclude>
+                        <exclude>**/*com/tribune/demo/reporting/error/**/*</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
