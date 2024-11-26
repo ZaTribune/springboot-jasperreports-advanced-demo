@@ -43,15 +43,19 @@ Before running this project, ensure you have the following installed:
 - To create these templates easily, you will need to use the Jaspersoft Studio.
 - After exporting your templates from the editor, you can insert them [here]("src/main/resources/static/templates").
 - To support multiple languages/locales per record, you will have to create a template for each reportLocale.
+### First Example
 - On the first example, I've provided two templates {`invoice_en`, `invoice_ar`} representing the two reportLocale
   implementations of a report called invoice.
 - You will have to follow a certain structure/hierarchy for data input.
-  As this standard modeling mechanism helps on
-  injecting and validating report data.
-  See the following figure:
-
+  Adapting this structure helps on
+  injecting and validating report data.  
+  See the following figure:,
+  
+<div align="center">
 <img src="samples/overview.svg" height="300" alt="overview"/>
+</div>
 
+### Second Example
 - The second example `v2` is for getting translated reposts; Also two samples {`receipt_en`, `receipt_ar`} were added.
 - For translation APIs,
   visit this [url](https://github.com/LibreTranslate/LibreTranslate/tree/main?tab=readme-ov-file#mirrors)
@@ -77,7 +81,7 @@ Before running this project, ensure you have the following installed:
 
 ## License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
