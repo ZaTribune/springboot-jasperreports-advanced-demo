@@ -6,7 +6,7 @@
   <br/>
   <img src="samples/jasper-reports.png" width="417" alt="jasperreports"/>
   <h2>SpringBoot Reporting Service</h2>
-  <p>A demo project for generating Reports (XLS, PDFs, and so on) using JasperReports & SpringBoot.</p>
+  <p>A demo project for generating reports using JasperReports Libraries & SpringBoot.</p>
 
 [![codecov](https://codecov.io/gh/zatribune/springboot-jasperreports-advanced-demo/graph/badge.svg?token=STPROBEOTZ)](https://codecov.io/gh/zatribune/springboot-jasperreports-advanced-demo)
 </div>
@@ -36,9 +36,13 @@
   and configure directories.
 - Every Jasperreports workflow starts with the creation of a template, exported to a `.jrxml` file.
   This file will be compiled later (during runtime) to a `.jasper` file.
-- To create these templates easily, you will need to use the Jaspersoft Studio.
+- To create these templates easily, you will need to use the [Jaspersoft Studio](https://community.jaspersoft.com/download-jaspersoft/download-jaspersoft/).
 - After exporting your templates from the editor, you can insert them [here]("src/main/resources/static/templates").
 - To support multiple languages/locales per record, you will have to create a template for each reportLocale.
+- (Optional) You can use the `LibreTranslate API` - [docs](https://github.com/LibreTranslate/LibreTranslate/blob/main/README.md).
+  ```shell
+  pip install libretranslate
+  ```
 ### First Example
 - On the first example, I've provided two templates {`invoice_en`, `invoice_ar`} representing the two reportLocale
   implementations of a report called invoice.

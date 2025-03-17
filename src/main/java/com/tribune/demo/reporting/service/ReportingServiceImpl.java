@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.data.JsonDataSource;
+import net.sf.jasperreports.json.data.JsonDataSource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -52,13 +52,12 @@ public class ReportingServiceImpl implements ReportingService {
     private String defaultLanguage;
 
     /**
-     * to export to paths
-     *
-     * @<code> exporter.setExporterOutput(new SimpleOutputStreamExporterOutput ( outputPath + " / " + fileName));
-     * </code>
+     * <pre>
+     * to export to paths:
+     * <code>exporter.setExporterOutput(new SimpleOutputStreamExporterOutput ( outputPath + " / " + fileName));</code>
      * we can also utilize {@link net.sf.jasperreports.engine.util.JRSaver}
-     * @<code> JRSaver.saveObject(jasperReport, " employeeReport.jasper ");
-     * </code>
+     * <code>JRSaver.saveObject(jasperReport, " employeeReport.jasper ");</code>
+     * </pre>
      **/
 
     @Override
@@ -155,7 +154,7 @@ public class ReportingServiceImpl implements ReportingService {
 
         //batch translate:
         if (!namesToTranslate.isEmpty()) {
-            translateEntries(entries, String.join(",", namesToTranslate), language);
+            translateEntries(entries, String.join("\n", namesToTranslate), language);
         }
 
         ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
@@ -202,14 +201,13 @@ public class ReportingServiceImpl implements ReportingService {
 
     public List<ReportEntry> prepareEntries(ObjectNode reportRequest, String language) {
         List<ReportEntry> entries = new ArrayList<>();
-        AtomicInteger mainIndex = new AtomicInteger(0);
-        reportRequest.fields().forEachRemaining(entry -> {
-            mainIndex.getAndIncrement();
-            String name;
-            ReportEntry en = new ReportEntry();
-            name = messageSource.getMessage(entry.getKey(), null, entry.getKey(), Locale.forLanguageTag(language));
 
-            if (!language.toLowerCase().equals(defaultLanguage) && name != null && name.equals(entry.getKey())) {
+        reportRequest.fields().forEachRemaining(entry -> {
+
+            ReportEntry en = new ReportEntry();
+            String name = messageSource.getMessage(entry.getKey(), null, entry.getKey(), Locale.forLanguageTag(language));
+
+            if (!language.toLowerCase().equals(defaultLanguage) && StringUtils.equals(name, entry.getKey())) {
                 en.setTranslate(true);
             }
             en.setKey(name);
@@ -228,7 +226,7 @@ public class ReportingServiceImpl implements ReportingService {
         log.info("translation output: {}", concatenatedString);
 
         //update a translation list with results
-        String[] s = concatenatedString.split("[,،]");//for LTR & RTL
+        String[] s = concatenatedString.split("\n");//for LTR & RTL
 
         AtomicInteger r = new AtomicInteger(0);
         //fill empty gaps

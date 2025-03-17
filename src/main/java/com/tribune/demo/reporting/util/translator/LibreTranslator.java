@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.regex.Pattern;
@@ -67,11 +66,11 @@ public class LibreTranslator implements Translator {
                         clientResponse.bodyToMono(TranslateResponse.class)
                 )
                 .timeout(Duration.ofSeconds(3))
-                .doOnError(t->                log.error("Error occurred while translating text [{}] to [{}]", textToTranslate, to, t))
+                .doOnError(t -> log.error("Error occurred while translating text [{}] to [{}]", textToTranslate, to, t))
                 .onErrorReturn(
-                    TranslateResponse.builder()
-                            .translatedText(textToTranslate)
-                            .build()
+                        TranslateResponse.builder()
+                                .translatedText(textToTranslate)
+                                .build()
                 )
 
                 .block();

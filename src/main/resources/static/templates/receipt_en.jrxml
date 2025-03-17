@@ -1,117 +1,78 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bfad83a2-2872-4536-bfba-4d9cb5451da1">
+<!-- Created with Jaspersoft Studio version 7.0.2.final using JasperReports Library version 7.0.2-31532122640f516c6d17238ae0e41a08113d5ac0  -->
+<jasperReport name="invoice" language="java" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bfad83a2-2872-4536-bfba-4d9cb5451da1">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="NO_DATA_ADAPTER"/>
-	<subDataset name="invoiceDataSet" uuid="d9e0cf39-fb7b-4253-b41d-01f375ccd193">
+	<dataset name="invoiceDataSet" uuid="d9e0cf39-fb7b-4253-b41d-01f375ccd193">
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="NO_DATA_ADAPTER"/>
-		<queryString>
-			<![CDATA[]]>
-		</queryString>
+		<query language="sql"><![CDATA[]]></query>
 		<field name="name" class="java.lang.String"/>
 		<field name="value" class="java.lang.String">
-			<fieldDescription><![CDATA[value]]></fieldDescription>
+			<description><![CDATA[value]]></description>
 		</field>
-	</subDataset>
+	</dataset>
 	<parameter name="title" class="java.lang.String"/>
-	<parameter name="invoiceDataSource" class="net.sf.jasperreports.engine.data.JsonDataSource"/>
+	<parameter name="invoiceDataSource" class="net.sf.jasperreports.json.data.JsonDataSource"/>
 	<parameter name="logo" class="java.awt.image.BufferedImage"/>
-	<queryString>
-		<![CDATA[]]>
-	</queryString>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
-	<title>
-		<band height="170">
-			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-			<textField>
-				<reportElement x="50" y="120" width="440" height="30" forecolor="#030303" uuid="a7ef6fe6-5607-4a62-8152-347adb3ada3a"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="20"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{title}]]></textFieldExpression>
-			</textField>
-			<image hAlign="Center" isUsingCache="true">
-				<reportElement x="27" y="0" width="500" height="105" uuid="31b138ae-92e1-4d3f-a3eb-47e5b4419afc">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
-			</image>
-		</band>
+	<query language="sql"><![CDATA[]]></query>
+	<background splitType="Stretch"/>
+	<title height="170">
+		<element kind="textField" uuid="a7ef6fe6-5607-4a62-8152-347adb3ada3a" x="50" y="120" width="440" height="30" forecolor="#030303" fontName="DejaVu Sans" fontSize="20.0" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA[$P{title}]]></expression>
+		</element>
+		<element kind="image" uuid="31b138ae-92e1-4d3f-a3eb-47e5b4419afc" x="27" y="0" width="500" height="105" usingCache="true" hImageAlign="Center">
+			<expression><![CDATA[$P{logo}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 	</title>
 	<detail>
 		<band height="40" splitType="Stretch">
-			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 			<printWhenExpression><![CDATA[$V{REPORT_COUNT}.intValue()==1]]></printWhenExpression>
-			<componentElement>
-				<reportElement x="52" y="0" width="450" height="40" uuid="e9710c41-5f51-4ccf-a63d-a73dc86d35aa">
-					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
-					<datasetRun subDataset="invoiceDataSet" uuid="23ea797b-b8e9-4567-be98-a89645b31318">
+			<element kind="component" uuid="e9710c41-5f51-4ccf-a63d-a73dc86d35aa" x="52" y="0" width="450" height="40">
+				<component kind="list" printOrder="Vertical">
+					<datasetRun uuid="23ea797b-b8e9-4567-be98-a89645b31318" subDataset="invoiceDataSet">
 						<dataSourceExpression><![CDATA[$P{invoiceDataSource}]]></dataSourceExpression>
 					</datasetRun>
-					<jr:listContents height="40" width="450">
-						<textField textAdjust="StretchHeight">
-							<reportElement mode="Opaque" x="0" y="0" width="225" height="40" backcolor="#B5EFFF" uuid="99586999-f595-40ba-a4a1-591d95887a44">
-								<property name="com.jaspersoft.studio.unit.height" value="px"/>
-							</reportElement>
+					<contents height="40" width="450">
+						<element kind="textField" uuid="99586999-f595-40ba-a4a1-591d95887a44" mode="Opaque" x="0" y="0" width="225" height="40" backcolor="#B5EFFF" fontName="DejaVu Sans" fontSize="14.0" textAdjust="StretchHeight" hTextAlign="Left" vTextAlign="Top">
+							<expression><![CDATA[$F{name}]]></expression>
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
 							<box topPadding="10" leftPadding="3">
 								<topPen lineWidth="1.0"/>
 								<leftPen lineWidth="1.0"/>
 								<bottomPen lineWidth="1.0"/>
 								<rightPen lineWidth="1.0"/>
 							</box>
-							<textElement textAlignment="Left" verticalAlignment="Top">
-								<font fontName="DejaVu Sans" size="14"/>
-							</textElement>
-							<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
-						</textField>
-						<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-							<reportElement stretchType="ContainerHeight" x="225" y="0" width="225" height="40" uuid="9b5711ee-bfd9-430f-8b25-b0cd1bd7a16f">
-								<property name="com.jaspersoft.studio.unit.height" value="px"/>
-							</reportElement>
+						</element>
+						<element kind="textField" uuid="9b5711ee-bfd9-430f-8b25-b0cd1bd7a16f" stretchType="ContainerHeight" x="225" y="0" width="225" height="40" fontName="DejaVu Sans" fontSize="14.0" textAdjust="StretchHeight" blankWhenNull="true" hTextAlign="Left" vTextAlign="Top">
+							<expression><![CDATA[$F{value}.replace("\"", "")]]></expression>
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
 							<box topPadding="10" leftPadding="3">
 								<topPen lineWidth="1.0"/>
 								<leftPen lineWidth="1.0"/>
 								<bottomPen lineWidth="1.0"/>
 								<rightPen lineWidth="1.0"/>
 							</box>
-							<textElement textAlignment="Left" verticalAlignment="Top">
-								<font fontName="DejaVu Sans" size="14"/>
-							</textElement>
-							<textFieldExpression><![CDATA[$F{value}.replace("\"", "")]]></textFieldExpression>
-						</textField>
-					</jr:listContents>
-				</jr:list>
-			</componentElement>
+						</element>
+					</contents>
+				</component>
+				<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			</element>
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 		</band>
 	</detail>
-	<pageFooter>
-		<band height="59" splitType="Stretch">
-			<property name="com.jaspersoft.studio.layout"/>
+	<pageFooter height="59" splitType="Stretch">
+		<element kind="line" uuid="23d3d6cd-bbe0-436c-b938-bacaa7181e2f" x="0" y="13" width="555" height="2" forecolor="#983030">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<line>
-				<reportElement x="0" y="13" width="555" height="2" forecolor="#983030" uuid="23d3d6cd-bbe0-436c-b938-bacaa7181e2f">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-			</line>
-			<textField>
-				<reportElement x="412" y="29" width="141" height="30" uuid="efd03938-e18f-4da8-9293-e14bc3cc355c"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Page no. "+ $V{PAGE_NUMBER} + " of " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="0" y="29" width="412" height="30" uuid="839b19be-c1f3-4483-86a9-7d1bdc69d58a"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="8"/>
-				</textElement>
-				<text><![CDATA[The Tribune Company ltd.]]></text>
-			</staticText>
-		</band>
+		</element>
+		<element kind="textField" uuid="efd03938-e18f-4da8-9293-e14bc3cc355c" x="412" y="29" width="141" height="30" fontName="DejaVu Sans" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA["Page no. "+ $V{PAGE_NUMBER} + " of " + $V{PAGE_NUMBER}]]></expression>
+		</element>
+		<element kind="staticText" uuid="839b19be-c1f3-4483-86a9-7d1bdc69d58a" x="0" y="29" width="412" height="30" fontName="DejaVu Sans" fontSize="8.0" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[The Tribune Company ltd.]]></text>
+		</element>
+		<property name="com.jaspersoft.studio.layout"/>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
 	</pageFooter>
 </jasperReport>
