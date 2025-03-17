@@ -1,5 +1,5 @@
 <div align="center" style="margin-top: 20px">
-  <img src="samples/spring.svg" width="20%" alt="spring"/>
+  <img src="samples/spring.svg" width="100px" height="100px" alt="spring"/>
   <br/>
   <br/>
   <img src="samples/plus.svg" width="5%" alt="spring"/>
