@@ -1,6 +1,7 @@
 package com.tribune.demo.reporting.error;
 
 
+import com.tribune.demo.reporting.model.GenericResponse;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import com.tribune.demo.reporting.model.GenericResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,10 +33,10 @@ public class RestControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(JRException.class)
-    ResponseEntity<GenericResponse> handleException(JRException ex) {
+    ResponseEntity<GenericResponse<String>> handleException(JRException ex) {
 
         logger.error(ex.getMessageKey());
-        GenericResponse response = GenericResponse.builder()
+        GenericResponse<String> response = GenericResponse.<String>builder()
                 .message(ex.getMessage())
                 .reason(ex.getCause() == null ? new String[]{ex.getLocalizedMessage()} : new String[]{ex.getCause().getMessage()})
                 .code(6001)
@@ -46,10 +46,10 @@ public class RestControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UnsupportedItemException.class)
-    ResponseEntity<GenericResponse> handleException(UnsupportedItemException ex) {
+    ResponseEntity<GenericResponse<String>> handleException(UnsupportedItemException ex) {
 
         logger.error(ex.getMessage());
-        GenericResponse response = GenericResponse.builder()
+        GenericResponse<String> response = GenericResponse.<String>builder()
                 .message(ex.getMessage())
                 .reason(ex.getCause() == null ? new String[]{ex.getLocalizedMessage()} : new String[]{ex.getCause().getMessage()})
                 .code(6002)
@@ -71,7 +71,7 @@ public class RestControllerAdvisor extends ResponseEntityExceptionHandler {
 
         logger.error(list);
 
-        GenericResponse response = GenericResponse.builder()
+        GenericResponse<String> response = GenericResponse.<String>builder()
                 .message("Validation Error")
                 .reason(list.toArray())
                 .code(6002)

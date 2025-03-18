@@ -17,10 +17,10 @@ import java.io.OutputStream;
 public class XlsOutputProcessor implements OutputProcessor{
 
 /**
- * @<code>
+ * <pre><code>
  *    exporter.setExporterOutput(
  *        new SimpleOutputStreamExporterOutput(outputPath + "/" + name + ".xls"));
- * </code>
+ * </code></pre>
  **/
     @Override
     public void export(JasperPrint jasperPrint, OutputStream outputStream) throws JRException {

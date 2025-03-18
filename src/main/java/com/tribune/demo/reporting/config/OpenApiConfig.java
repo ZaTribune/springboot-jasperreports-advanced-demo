@@ -16,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
  **/
 @Configuration
 @EnableWebMvc
-public class SwaggerConfig extends WebMvcConfigurationSupport {
+public class OpenApiConfig extends WebMvcConfigurationSupport {
 
     @Bean
     public GroupedOpenApi publicApi() {

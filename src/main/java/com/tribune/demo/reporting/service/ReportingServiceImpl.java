@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
@@ -27,11 +26,11 @@ import com.tribune.demo.reporting.model.ReportExportType;
 import com.tribune.demo.reporting.model.ReportRequest;
 import com.tribune.demo.reporting.util.translator.Translator;
 import com.tribune.demo.reporting.util.processor.DynamicOutputProcessorService;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -61,8 +60,8 @@ public class ReportingServiceImpl implements ReportingService {
      **/
 
     @Override
-    public void generateFromModel(ReportRequest reportRequest, ReportExportType accept, HttpServletResponse servletResponse)
-            throws JRException, IOException, UnsupportedItemException {
+    public StreamingResponseBody generateFromModel(ReportRequest reportRequest, ReportExportType accept)
+            throws JRException, UnsupportedItemException {
         log.info("generateFromModel() - XThread: {}", Thread.currentThread().getName());
 
         //first check for report existence
@@ -81,15 +80,13 @@ public class ReportingServiceImpl implements ReportingService {
                 , parametersMap
                 , new JREmptyDataSource());
 
-
-        String fileName = String.format("%s%s", "test", new SimpleDateFormat("yyyyMMddhhmmss'." + accept.toString().toLowerCase() + "'")
-                .format(new Date()));
-
-        log.info("fileName: {}", fileName);
-
-        servletResponse.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-
-        outputProcessor.export(accept, jasperPrint, servletResponse.getOutputStream());
+        return outputStream -> {
+            try {
+                outputProcessor.export(accept, jasperPrint, outputStream);
+            } catch (JRException e) {
+                throw new RuntimeException(e);
+            }
+        };
     }
 
     public Map<String, Object> processReportRequest(Report report, Map<String, Object> inputMap) {
@@ -139,8 +136,8 @@ public class ReportingServiceImpl implements ReportingService {
     }
 
     @Override
-    public void generateDirect(ObjectNode reportRequest, String reportTitle, String language,
-                               ReportExportType accept, HttpServletResponse servletResponse) throws JRException, IOException {
+    public StreamingResponseBody generateDirect(ObjectNode reportRequest, String reportTitle, String language,
+                               ReportExportType accept) throws JRException {
         log.info("generateDirect() - XThread: {}", Thread.currentThread().getName());
         Map<String, Object> parametersMap = new HashMap<>();
 
@@ -192,11 +189,15 @@ public class ReportingServiceImpl implements ReportingService {
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport
                 , parametersMap
                 , new JREmptyDataSource());
-        String fileName = String.format("%s%s", "test", new SimpleDateFormat("yyyyMMddhhmmss'." + accept.toString().toLowerCase() + "'")
-                .format(new Date()));
-        log.info("fileName: {}", fileName);
-        servletResponse.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-        outputProcessor.export(accept, jasperPrint, servletResponse.getOutputStream());
+
+        return outputStream -> {
+            try {
+                outputProcessor.export(accept, jasperPrint, outputStream);
+            } catch (JRException e) {
+                throw new RuntimeException(e);
+            }
+        };
+
     }
 
     public List<ReportEntry> prepareEntries(ObjectNode reportRequest, String language) {

@@ -1,48 +1,48 @@
 package com.tribune.demo.reporting.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.tribune.demo.reporting.error.UnsupportedItemException;
 import com.tribune.demo.reporting.model.ReportExportType;
 import com.tribune.demo.reporting.model.ReportRequest;
 import com.tribune.demo.reporting.service.ReportingService;
-import org.junit.jupiter.api.Test;
-
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import jakarta.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JRException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.*;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
+import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @ExtendWith(MockitoExtension.class)
+@WebMvcTest(controllers = ReportingController.class)
 class ReportingControllerTest {
 
-    @Mock
+    @Autowired
+    MockMvc mockMvc;
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    @MockitoBean
     ReportingService reportingService;
 
-    @Mock
-    HttpServletResponse response;
-
-    @InjectMocks
-    ReportingController reportingController;
 
     ReportRequest reportRequest;
     ObjectNode reportRequestJson;
-    String LANGUAGE = "EN";
-    String REPORT_TITLE = "Sample Report";
-    ReportExportType EXPORT_TYPE = ReportExportType.PDF;
+
 
     @BeforeEach
     void setUp() {
@@ -51,64 +51,104 @@ class ReportingControllerTest {
     }
 
     @Test
-    void testGenerateV1Success() throws Exception {
+    void testGenerateReport_Success() throws Exception {
 
-        doNothing().when(reportingService).generateFromModel(reportRequest, EXPORT_TYPE, response);
+        ReportRequest request = new ReportRequest();
+        request.setReportId(123L);
+        request.setLocale("ar");
+        request.setData(Map.of("a","1","b","2"));
 
-        CompletableFuture<Void> result = reportingController.generateV1(reportRequest, EXPORT_TYPE, response);
+        ReportExportType type = ReportExportType.PDF;
 
-        result.join();
-        verify(reportingService, times(1)).generateFromModel(reportRequest, EXPORT_TYPE, response);
+        StreamingResponseBody mockStream = outputStream -> outputStream.write("Mocked PDF Content".getBytes());
+
+        when(reportingService.generateFromModel(request, type)).thenReturn(mockStream);
+
+        mockMvc.perform(post("/reporting/generate/{type}", type)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
     }
 
     @Test
-    void testGenerateV1Exception() throws Exception {
+    void testGenerateReport_whenValidationError() throws Exception {
 
-        doThrow(new IOException("Something wrong happened!")).when(reportingService)
-                .generateFromModel(reportRequest, EXPORT_TYPE, response);
+        ReportRequest request = new ReportRequest();
+        request.setReportId(123L);
+        request.setData(Map.of("a","1","b","2"));
 
-        CompletionException completionException = assertThrows(CompletionException.class, () -> {
-            CompletableFuture<Void> result = reportingController.generateV1(reportRequest, EXPORT_TYPE, response);
-            result.join();
-        });
+        ReportExportType type = ReportExportType.PDF;
 
-        Throwable cause = completionException.getCause();
-        assertEquals(ResponseStatusException.class, cause.getClass());
-        ResponseStatusException responseStatusException = (ResponseStatusException) cause;
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseStatusException.getStatusCode());
-        assertEquals("Something wrong happened!", responseStatusException.getReason());
+        mockMvc.perform(post("/reporting/generate/{type}", type)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Validation Error"));
     }
 
 
     @Test
-    void testGenerateV2Success() throws Exception {
+    void testGenerateReportV2_Success() throws Exception {
 
-        doNothing().when(reportingService).generateDirect(reportRequestJson, REPORT_TITLE, LANGUAGE, EXPORT_TYPE, response);
+        ObjectNode reportRequest = objectMapper.createObjectNode();
+        reportRequest.put("key", "value");
+        ReportExportType exportType = ReportExportType.PDF;
+        String language = "EN";
+        String reportTitle = "Test Report";
 
-        CompletableFuture<Void> result = reportingController.generateV2(reportRequestJson, EXPORT_TYPE, LANGUAGE, REPORT_TITLE, response);
+        StreamingResponseBody mockStream = outputStream -> outputStream.write("Mocked PDF Content".getBytes());
 
+        when(reportingService.generateDirect(reportRequest, reportTitle, language, exportType)).thenReturn(mockStream);
 
-        result.join();
-        verify(reportingService, times(1)).generateDirect(reportRequestJson, REPORT_TITLE, LANGUAGE, EXPORT_TYPE, response);
+        mockMvc.perform(post("/reporting/v2/generate/{type}", exportType)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.ACCEPT_LANGUAGE, language)
+                        .param("reportTitle", reportTitle)
+                        .content(objectMapper.writeValueAsString(reportRequest)))
+                .andExpect(status().isOk());
     }
 
     @Test
-    void testGenerateV2Exception() throws Exception {
+    void testGenerateReportV2_UnsupportedItemException() throws Exception {
 
-        doThrow(new IOException("Something wrong happened!")).when(reportingService)
-                .generateDirect(reportRequestJson, REPORT_TITLE, LANGUAGE, EXPORT_TYPE, response);
+        ObjectNode reportRequest = objectMapper.createObjectNode();
+        reportRequest.put("key", "value");
 
-        CompletionException completionException = assertThrows(CompletionException.class, () -> {
-            CompletableFuture<Void> result = reportingController.generateV2(reportRequestJson, EXPORT_TYPE, LANGUAGE, REPORT_TITLE, response);
-            result.join();
-        });
+        String language = "Fr";
+        String reportTitle = "Test Report";
 
-        Throwable cause = completionException.getCause();
-        assertEquals(ResponseStatusException.class, cause.getClass());
-        ResponseStatusException responseStatusException = (ResponseStatusException) cause;
+        when(reportingService.generateDirect(reportRequest, reportTitle, language, ReportExportType.PDF))
+                .thenThrow(new UnsupportedItemException("Unsupported locale type", "locale", List.of("Ar","En")));
 
-        assertEquals(HttpStatus.BAD_REQUEST, responseStatusException.getStatusCode());
-        assertEquals("Something wrong happened!", responseStatusException.getReason());
+
+        mockMvc.perform(post("/reporting/v2/generate/{type}", ReportExportType.PDF)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.ACCEPT_LANGUAGE, language)
+                        .param("reportTitle", reportTitle)
+                        .content(objectMapper.writeValueAsString(reportRequest)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Unsupported Unsupported locale type item at 'locale'. Supported Unsupported locale type Items are [Ar, En]."));
+    }
+
+    @Test
+    void testGenerateReportV2_JRException() throws Exception {
+
+        ObjectNode reportRequest = objectMapper.createObjectNode();
+        reportRequest.put("key", "value");
+        ReportExportType exportType = ReportExportType.PDF;
+        String language = "EN";
+        String reportTitle = "Test Report";
+
+        when(reportingService.generateDirect(reportRequest, reportTitle, language, exportType))
+                .thenThrow(new JRException("Error generating report"));
+
+
+        mockMvc.perform(post("/reporting/v2/generate/{type}", exportType)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.ACCEPT_LANGUAGE, language)
+                        .param("reportTitle", reportTitle)
+                        .content(objectMapper.writeValueAsString(reportRequest)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Error generating report"));
     }
 }

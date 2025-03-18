@@ -16,10 +16,10 @@ import java.io.OutputStream;
 public class HtmlOutputProcessor implements OutputProcessor{
 
 /**
- * @<code>
+ * <pre><code>
  *     exporter.setExporterOutput(
  *        new SimpleHtmlExporterOutput(outputPath + "/" + name + ".html"));
- * </code>
+ * </code></pre>
  **/
 
     @Override

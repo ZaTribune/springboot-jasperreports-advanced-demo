@@ -185,6 +185,7 @@
                 </executions>
                 <configuration>
                     <excludes>
+                        <exclude>**/.gitignore</exclude>
                         <exclude>**/*Config.class</exclude>
                         <exclude>**/*Application.class</exclude>
                         <exclude>**/*Exception.class</exclude>

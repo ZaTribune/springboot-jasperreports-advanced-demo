@@ -16,10 +16,10 @@ import java.io.OutputStream;
 public class CsvOutputProcessor implements OutputProcessor{
 
     /**
-     * @<code>
+     * <pre><code>
      *   exporter.setExporterOutput(
      *          new SimpleWriterExporterOutput ( outputPath + " / test.csv "));
-     * </code>
+     * </code></pre>
      * */
 
     @Override

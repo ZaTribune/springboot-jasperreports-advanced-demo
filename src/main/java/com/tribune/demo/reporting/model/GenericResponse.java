@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GenericResponse {
+public class GenericResponse<T> {
 
     @Email
     private String message;
@@ -20,6 +20,6 @@ public class GenericResponse {
     private Object reason;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Object data;
+    private T data;
     private int code;
 }
