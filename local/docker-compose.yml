@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  libretranslate:
+    image: libretranslate/libretranslate:latest
+    container_name: libretranslate
+    tty: true  # magic fix
+    ports:
+      - "5000:5000"
+    environment:
+      - LT_LOAD_ONLY=true # Optional: Load only the models you need
+      - LT_MODEL_DIR=/models # Optional: Specify a custom model directory
+      - LT_LOAD_ONLY=en,ar
+    volumes:
+      - ./libretranslate_models:/models # Mount a volume for models
+
+volumes:
+  libretranslate_models:

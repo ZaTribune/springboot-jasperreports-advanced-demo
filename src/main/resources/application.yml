@@ -45,7 +45,7 @@ logging:
     web: debug
 
 api:
-  libre-translate: https://translate.terraprint.co/translate
+  libre-translate: http://localhost:5000/translate
 
 system:
   default-language: en

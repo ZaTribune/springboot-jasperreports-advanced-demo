@@ -40,6 +40,7 @@
 - After exporting your templates from the editor, you can insert them [here]("src/main/resources/static/templates").
 - To support multiple languages/locales per record, you will have to create a template for each reportLocale.
 - (Optional) You can use the `LibreTranslate API` - [docs](https://github.com/LibreTranslate/LibreTranslate/blob/main/README.md).
+  - Install locally [here](local).
   ```shell
   pip install libretranslate
   ```
