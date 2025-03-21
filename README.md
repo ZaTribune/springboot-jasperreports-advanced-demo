@@ -6,15 +6,22 @@
   <br/>
   <img src="samples/jasper-reports.png" width="417" alt="jasperreports"/>
   <h2>SpringBoot Reporting Service</h2>
-  <p>A demo project for generating reports using JasperReports Libraries & SpringBoot.</p>
+  <p>A powerful demo project for generating dynamic reports using JasperReports Libraries & Spring Boot.</p>
 
-![Instruction Coverage](https://img.shields.io/badge/Instruction_Coverage-15.32%25-red)
-![Line Coverage](https://img.shields.io/badge/Line_Coverage-12.94%25-red)
-![Branch Coverage](https://img.shields.io/badge/Branch_Coverage-33.33%25-red)
-![Complexity Coverage](https://img.shields.io/badge/Complexity_Coverage-12.9%25-red)
-![Method Coverage](https://img.shields.io/badge/Method_Coverage-11.49%25-red)
-![Class Coverage](https://img.shields.io/badge/Class_Coverage-15.0%25-red)
-![Overall Coverage](https://img.shields.io/badge/Overall_Coverage-14.74%25-red)
+<div align="center" style="margin: 20px 0; border: 2px solid; border-radius: 10px; background-color: transparent; max-width: 600px;">
+  <h3 style="margin: 0; font-size: 1.5em;">📊 Code Coverage</h3>
+  <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+
+   ![Instruction Coverage](https://img.shields.io/badge/Instruction_Coverage-15.32%25-red)
+   ![Line Coverage](https://img.shields.io/badge/Line_Coverage-12.94%25-red)
+   ![Branch Coverage](https://img.shields.io/badge/Branch_Coverage-33.33%25-red)
+   ![Complexity Coverage](https://img.shields.io/badge/Complexity_Coverage-12.9%25-red)
+   ![Method Coverage](https://img.shields.io/badge/Method_Coverage-11.49%25-red)
+   ![Class Coverage](https://img.shields.io/badge/Class_Coverage-15.0%25-red)
+   ![Overall Coverage](https://img.shields.io/badge/Overall_Coverage-14.74%25-red)
+
+  </div>
+</div>
 
 </div>
 
@@ -27,15 +34,13 @@
   API.
 
 ## Features
-
-- There are two models for generating reports.
-    - **Pre-modeled** Reports (with strict validation and mapping).
-    - **Direct Filling** Reports (with translation capability) ~ Also referred to as **v2**.
-- Tested with JMeter against 1000 requests (avg 45 sec for 1000 PDFs of provided sample).
-- Support for `LTR` & `RTL` languages; Given English and Arabic as an example with the same workflow except for data
-  input.
-- Notes for different workflows created as "**how to**" to help users [in progress].
-- Supported output formats {`PDF`, `XLS`, `CSV`, `HTML`}.
+- **Two Report Generation Models**:
+  - **Pre-Modeled Reports**: Strict validation and mapping for structured data.
+  - **Direct Filling Reports (v2)**: Supports translation capabilities for dynamic data.
+- **Performance**: Tested with JMeter for up to 1000 requests, averaging 45 seconds for 1000 PDFs.
+- **Multilingual Support**: Handles both `LTR` (Left-to-Right) and `RTL` (Right-to-Left) languages like English and Arabic.
+- **Output Formats**: Supports multiple formats, including `PDF`, `XLS`, `CSV`, and `HTML`.
+- **Documentation**: Includes "how-to" notes for different workflows (in progress).
 
 ## Steps to deploy
 
@@ -44,13 +49,10 @@
 - Every Jasperreports workflow starts with the creation of a template, exported to a `.jrxml` file.
   This file will be compiled later (during runtime) to a `.jasper` file.
 - To create these templates easily, you will need to use the [Jaspersoft Studio](https://community.jaspersoft.com/download-jaspersoft/download-jaspersoft/).
-- After exporting your templates from the editor, you can insert them [here]("src/main/resources/static/templates").
+- After exporting your templates from the editor, you can insert them [here](src/main/resources/static/templates).
 - To support multiple languages/locales per record, you will have to create a template for each reportLocale.
 - (Optional) You can use the `LibreTranslate API` - [docs](https://github.com/LibreTranslate/LibreTranslate/blob/main/README.md).
   - Install locally [here](local).
-  ```shell
-  pip install libretranslate
-  ```
 ### First Example
 - On the first example, I've provided two templates {`invoice_en`, `invoice_ar`} representing the two reportLocale
   implementations of a report called invoice.
@@ -59,21 +61,19 @@
   injecting and validating report data.  
   See the following figure:,
   
-<div align="center">
-<img src="samples/overview.svg" height="300" alt="overview"/>
-</div>
+  <div align="center">
+  <img src="samples/overview.svg" height="300" alt="overview"/>
+  </div>
 
 ### Second Example
-- The second example `v2` is for getting translated reposts; Also two samples {`receipt_en`, `receipt_ar`} were added.
-- For translation APIs,
-  visit this [url](https://github.com/LibreTranslate/LibreTranslate/tree/main?tab=readme-ov-file#mirrors)
-  to get a free mirror for LibreTranslate.
+- The second example `v2` is for **direct filling** with **field translation**; 
+- Also, two samples {`receipt_en`, `receipt_ar`} are provided.
 
 ## Testing
 
 - Provided with two testing templates for both types of models, You can use Postman for testing
-  by importing this [collections file]("samples/test.postman_collection.json").
-- Also, you can utilize [swagger-ui]("http://localhost:8083/swagger-ui/index.html).
+  by importing this [collections file](samples/jasperreports.postman_collection.json).
+- Also, you can use [swagger-ui]("http://localhost:8083/swagger-ui/index.html) for reference.
 - A [console.sql](samples/console.sql) file is added here to validate the db.
 
 ## Preview
