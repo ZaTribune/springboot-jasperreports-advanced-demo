@@ -1,0 +1,134 @@
+name: Update README with Coverage Badges
+
+on:
+  # Trigger on pull requests
+  pull_request:
+    types: [opened, synchronize, reopened] # Trigger on PR open, update, or reopen
+
+  # Trigger on pushes to any branch
+  push:
+    branches:
+      - '**' # Matches all branches
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Java (adjust version if needed)
+      - name: Set Up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Step 3: Build the project and generate JaCoCo report
+      - name: Build Project and Generate Coverage Report
+        run: mvn clean verify
+
+      # Step 4: Extract Coverage Percentages for Each Type
+      - name: Extract Coverage Percentages
+        id: coverage
+        run: |
+          # Extract totals for each type
+          INSTRUCTION_MISSED=$(grep -oP 'type="INSTRUCTION".*?missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+          INSTRUCTION_COVERED=$(grep -oP 'type="INSTRUCTION".*?covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+
+          LINE_MISSED=$(grep -oP 'type="LINE".*?missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+          LINE_COVERED=$(grep -oP 'type="LINE".*?covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+
+          BRANCH_MISSED=$(grep -oP 'type="BRANCH".*?missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+          BRANCH_COVERED=$(grep -oP 'type="BRANCH".*?covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+          
+          COMPLEXITY_MISSED=$(grep -oP 'type="COMPLEXITY".*?missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+          COMPLEXITY_COVERED=$(grep -oP 'type="COMPLEXITY".*?covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+
+          METHOD_MISSED=$(grep -oP 'type="METHOD".*?missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+          METHOD_COVERED=$(grep -oP 'type="METHOD".*?covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+
+          CLASS_MISSED=$(grep -oP 'type="CLASS".*?missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+          CLASS_COVERED=$(grep -oP 'type="CLASS".*?covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+
+          # Calculate percentages for each type using Python for floating-point precision
+          INSTRUCTION_PERCENTAGE=$(python3 -c "print(round(($INSTRUCTION_COVERED * 100) / ($INSTRUCTION_MISSED + $INSTRUCTION_COVERED), 2))")
+          LINE_PERCENTAGE=$(python3 -c "print(round(($LINE_COVERED * 100) / ($LINE_MISSED + $LINE_COVERED), 2))")
+          BRANCH_PERCENTAGE=$(python3 -c "print(round(($BRANCH_COVERED * 100) / ($BRANCH_MISSED + $BRANCH_COVERED), 2))")
+          COMPLEXITY_PERCENTAGE=$(python3 -c "print(round(($COMPLEXITY_COVERED * 100) / ($COMPLEXITY_MISSED + $COMPLEXITY_COVERED), 2))")
+          METHOD_PERCENTAGE=$(python3 -c "print(round(($METHOD_COVERED * 100) / ($METHOD_MISSED + $METHOD_COVERED), 2))")
+          CLASS_PERCENTAGE=$(python3 -c "print(round(($CLASS_COVERED * 100) / ($CLASS_MISSED + $CLASS_COVERED), 2))")
+
+          # Calculate overall coverage as a weighted average
+          OVERALL_PERCENTAGE=$(python3 -c "print(round(($INSTRUCTION_COVERED + $LINE_COVERED + $BRANCH_COVERED + $COMPLEXITY_COVERED + $METHOD_COVERED + $CLASS_COVERED) * 100 / ($INSTRUCTION_MISSED + $INSTRUCTION_COVERED + $LINE_MISSED + $LINE_COVERED + $BRANCH_MISSED + $BRANCH_COVERED + $COMPLEXITY_MISSED + $COMPLEXITY_COVERED + $METHOD_MISSED + $METHOD_COVERED + $CLASS_MISSED + $CLASS_COVERED), 2))")
+
+          # Save percentages as environment variables
+          echo "instruction_coverage=$INSTRUCTION_PERCENTAGE" >> $GITHUB_ENV
+          echo "line_coverage=$LINE_PERCENTAGE" >> $GITHUB_ENV
+          echo "branch_coverage=$BRANCH_PERCENTAGE" >> $GITHUB_ENV
+          echo "complexity_coverage=$COMPLEXITY_PERCENTAGE" >> $GITHUB_ENV
+          echo "method_coverage=$METHOD_PERCENTAGE" >> $GITHUB_ENV
+          echo "class_coverage=$CLASS_PERCENTAGE" >> $GITHUB_ENV
+          echo "overall_coverage=$OVERALL_PERCENTAGE" >> $GITHUB_ENV
+
+      # Step 5: Update README.md with Coverage Badges
+      - name: Update README with Coverage Badges
+        run: |
+          # Function to generate badge URL based on coverage percentage
+          generate_badge() {
+            local TYPE=$1
+            local COVERAGE=$2
+            BADGE_URL="https://img.shields.io/badge/${TYPE}-${COVERAGE}%25"
+
+            # Set badge color based on coverage percentage
+            if (( $(echo "$COVERAGE >= 90" | bc -l) )); then
+              BADGE_COLOR="brightgreen"
+            elif (( $(echo "$COVERAGE >= 75" | bc -l) )); then
+              BADGE_COLOR="yellow"
+            else
+              BADGE_COLOR="red"
+            fi
+
+            echo "${BADGE_URL}-${BADGE_COLOR}"
+          }
+
+          # Generate badges for each type
+          INSTRUCTION_BADGE=$(generate_badge "Instruction_Coverage" "${{ env.instruction_coverage }}")
+          LINE_BADGE=$(generate_badge "Line_Coverage" "${{ env.line_coverage }}")
+          BRANCH_BADGE=$(generate_badge "Branch_Coverage" "${{ env.branch_coverage }}")
+          COMPLEXITY_BADGE=$(generate_badge "Complexity_Coverage" "${{ env.complexity_coverage }}")
+          METHOD_BADGE=$(generate_badge "Method_Coverage" "${{ env.method_coverage }}")
+          CLASS_BADGE=$(generate_badge "Class_Coverage" "${{ env.class_coverage }}")
+          OVERALL_BADGE=$(generate_badge "Overall_Coverage" "${{ env.overall_coverage }}")
+
+          # Replace placeholders in README.md with badges
+          sed -i "s|!\[Instruction Coverage\](.*)|![Instruction Coverage](${INSTRUCTION_BADGE})|" README.md
+          sed -i "s|!\[Line Coverage\](.*)|![Line Coverage](${LINE_BADGE})|" README.md
+          sed -i "s|!\[Branch Coverage\](.*)|![Branch Coverage](${BRANCH_BADGE})|" README.md
+          sed -i "s|!\[Complexity Coverage\](.*)|![Complexity Coverage](${COMPLEXITY_BADGE})|" README.md
+          sed -i "s|!\[Method Coverage\](.*)|![Method Coverage](${METHOD_BADGE})|" README.md
+          sed -i "s|!\[Class Coverage\](.*)|![Class Coverage](${CLASS_BADGE})|" README.md
+          sed -i "s|!\[Overall Coverage\](.*)|![Overall Coverage](${OVERALL_BADGE})|" README.md
+
+      # Step 6: Commit and Push the Updated README.md
+      - name: Commit and Push Updated README
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add README.md
+          git commit -m "Update README with latest coverage badges" || echo "No changes to commit"
+
+          # Dynamically determine the branch to push to
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            TARGET_BRANCH="${{ github.head_ref }}"
+          else
+            TARGET_BRANCH="${{ github.ref_name }}"
+          fi
+
+          # Pull the latest changes from the remote branch to avoid conflicts
+          git pull origin "${TARGET_BRANCH}" --rebase || echo "No changes to pull"
+
+          # Push to the dynamically determined branch
+          git push origin HEAD:"${TARGET_BRANCH}"
