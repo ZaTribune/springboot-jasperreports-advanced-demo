@@ -1,12 +1,15 @@
-name: Update README with Overall Coverage Badge
+name: Update README with Coverage Badge
 
 on:
-  push:
-    branches:
-      - main
+  # Trigger on pull requests targeting the main branch
   pull_request:
     branches:
-      - main
+      - master
+
+  # Trigger on pushes to the main branch
+  push:
+    branches:
+      - master
 
 jobs:
   update-readme:
