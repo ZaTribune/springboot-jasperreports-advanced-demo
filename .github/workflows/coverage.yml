@@ -1,4 +1,4 @@
-name: Update README with Coverage Badge
+name: Update README with Coverage Badges
 
 on:
   # Trigger on pull requests
@@ -53,40 +53,64 @@ jobs:
           CLASS_MISSED=$(grep -oP 'type="CLASS".*?missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
           CLASS_COVERED=$(grep -oP 'type="CLASS".*?covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
 
-          # Calculate percentages for each type
-          INSTRUCTION_PERCENTAGE=$((INSTRUCTION_COVERED * 100 / (INSTRUCTION_MISSED + INSTRUCTION_COVERED)))
-          LINE_PERCENTAGE=$((LINE_COVERED * 100 / (LINE_MISSED + LINE_COVERED)))
-          BRANCH_PERCENTAGE=$((BRANCH_COVERED * 100 / (BRANCH_MISSED + BRANCH_COVERED)))
-          COMPLEXITY_PERCENTAGE=$((COMPLEXITY_COVERED * 100 / (COMPLEXITY_MISSED + COMPLEXITY_COVERED)))
-          METHOD_PERCENTAGE=$((METHOD_COVERED * 100 / (METHOD_MISSED + METHOD_COVERED)))
-          CLASS_PERCENTAGE=$((CLASS_COVERED * 100 / (CLASS_MISSED + CLASS_COVERED)))
+          # Calculate percentages for each type using Python for floating-point precision
+          INSTRUCTION_PERCENTAGE=$(python3 -c "print(round(($INSTRUCTION_COVERED * 100) / ($INSTRUCTION_MISSED + $INSTRUCTION_COVERED), 2))")
+          LINE_PERCENTAGE=$(python3 -c "print(round(($LINE_COVERED * 100) / ($LINE_MISSED + $LINE_COVERED), 2))")
+          BRANCH_PERCENTAGE=$(python3 -c "print(round(($BRANCH_COVERED * 100) / ($BRANCH_MISSED + $BRANCH_COVERED), 2))")
+          COMPLEXITY_PERCENTAGE=$(python3 -c "print(round(($COMPLEXITY_COVERED * 100) / ($COMPLEXITY_MISSED + $COMPLEXITY_COVERED), 2))")
+          METHOD_PERCENTAGE=$(python3 -c "print(round(($METHOD_COVERED * 100) / ($METHOD_MISSED + $METHOD_COVERED), 2))")
+          CLASS_PERCENTAGE=$(python3 -c "print(round(($CLASS_COVERED * 100) / ($CLASS_MISSED + $CLASS_COVERED), 2))")
 
           # Calculate overall coverage as a weighted average
-          OVERALL_PERCENTAGE=$(( (INSTRUCTION_PERCENTAGE + LINE_PERCENTAGE + BRANCH_PERCENTAGE + COMPLEXITY_PERCENTAGE + METHOD_PERCENTAGE + CLASS_PERCENTAGE) / 6 ))
+          OVERALL_PERCENTAGE=$(python3 -c "print(round(($INSTRUCTION_COVERED + $LINE_COVERED + $BRANCH_COVERED + $COMPLEXITY_COVERED + $METHOD_COVERED + $CLASS_COVERED) * 100 / ($INSTRUCTION_MISSED + $INSTRUCTION_COVERED + $LINE_MISSED + $LINE_COVERED + $BRANCH_MISSED + $BRANCH_COVERED + $COMPLEXITY_MISSED + $COMPLEXITY_COVERED + $METHOD_MISSED + $METHOD_COVERED + $CLASS_MISSED + $CLASS_COVERED), 2))")
 
-          # Save overall coverage percentage as an environment variable
-          echo "overall_coverage=$OVERALL_PERCENTAGE"
+          # Save percentages as environment variables
+          echo "instruction_coverage=$INSTRUCTION_PERCENTAGE" >> $GITHUB_ENV
+          echo "line_coverage=$LINE_PERCENTAGE" >> $GITHUB_ENV
+          echo "branch_coverage=$BRANCH_PERCENTAGE" >> $GITHUB_ENV
+          echo "complexity_coverage=$COMPLEXITY_PERCENTAGE" >> $GITHUB_ENV
+          echo "method_coverage=$METHOD_PERCENTAGE" >> $GITHUB_ENV
+          echo "class_coverage=$CLASS_PERCENTAGE" >> $GITHUB_ENV
           echo "overall_coverage=$OVERALL_PERCENTAGE" >> $GITHUB_ENV
 
-      # Step 5: Update README.md with Coverage Badge
-      - name: Update README with Coverage Badge
+      # Step 5: Update README.md with Coverage Badges
+      - name: Update README with Coverage Badges
         run: |
-          # Define the badge URL
-          BADGE_URL="https://img.shields.io/badge/coverage-${{ env.overall_coverage }}%25"
-          
-          # Set badge color based on coverage percentage
-          if [ "${{ env.overall_coverage }}" -ge 90 ]; then
-            BADGE_COLOR="brightgreen"
-          elif [ "${{ env.overall_coverage }}" -ge 75 ]; then
-            BADGE_COLOR="yellow"
-          else
-            BADGE_COLOR="red"
-          fi
+          # Function to generate badge URL based on coverage percentage
+          generate_badge() {
+            local TYPE=$1
+            local COVERAGE=$2
+            BADGE_URL="https://img.shields.io/badge/${TYPE}-${COVERAGE}%25"
 
-          BADGE_URL="${BADGE_URL}-${BADGE_COLOR}"
+            # Set badge color based on coverage percentage
+            if (( $(echo "$COVERAGE >= 90" | bc -l) )); then
+              BADGE_COLOR="brightgreen"
+            elif (( $(echo "$COVERAGE >= 75" | bc -l) )); then
+              BADGE_COLOR="yellow"
+            else
+              BADGE_COLOR="red"
+            fi
 
-          # Replace the existing badge in README.md
-          sed -i "s|!\[Code Coverage\](https://img.shields.io/badge/coverage-[0-9]*%25-[a-z]*)|![Code Coverage](${BADGE_URL})|" README.md
+            echo "${BADGE_URL}-${BADGE_COLOR}"
+          }
+
+          # Generate badges for each type
+          INSTRUCTION_BADGE=$(generate_badge "Instruction-Coverage" "${{ env.instruction_coverage }}")
+          LINE_BADGE=$(generate_badge "Line-Coverage" "${{ env.line_coverage }}")
+          BRANCH_BADGE=$(generate_badge "Branch-Coverage" "${{ env.branch_coverage }}")
+          COMPLEXITY_BADGE=$(generate_badge "Complexity-Coverage" "${{ env.complexity_coverage }}")
+          METHOD_BADGE=$(generate_badge "Method-Coverage" "${{ env.method_coverage }}")
+          CLASS_BADGE=$(generate_badge "Class-Coverage" "${{ env.class_coverage }}")
+          OVERALL_BADGE=$(generate_badge "Overall-Coverage" "${{ env.overall_coverage }}")
+
+          # Replace placeholders in README.md with badges
+          sed -i "s|!\[Instruction Coverage\](.*)|![Instruction Coverage](${INSTRUCTION_BADGE})|" README.md
+          sed -i "s|!\[Line Coverage\](.*)|![Line Coverage](${LINE_BADGE})|" README.md
+          sed -i "s|!\[Branch Coverage\](.*)|![Branch Coverage](${BRANCH_BADGE})|" README.md
+          sed -i "s|!\[Complexity Coverage\](.*)|![Complexity Coverage](${COMPLEXITY_BADGE})|" README.md
+          sed -i "s|!\[Method Coverage\](.*)|![Method Coverage](${METHOD_BADGE})|" README.md
+          sed -i "s|!\[Class Coverage\](.*)|![Class Coverage](${CLASS_BADGE})|" README.md
+          sed -i "s|!\[Overall Coverage\](.*)|![Overall Coverage](${OVERALL_BADGE})|" README.md
 
       # Step 6: Commit and Push the Updated README.md
       - name: Commit and Push Updated README
@@ -94,7 +118,7 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add README.md
-          git commit -m "Update README with latest coverage badge" || echo "No changes to commit"
+          git commit -m "Update README with latest coverage badges" || echo "No changes to commit"
 
           # Dynamically determine the branch to push to
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then

@@ -8,7 +8,13 @@
   <h2>SpringBoot Reporting Service</h2>
   <p>A demo project for generating reports using JasperReports Libraries & SpringBoot.</p>
 
-![Code Coverage](https://img.shields.io/badge/coverage-17%25-red)
+![Instruction Coverage](https://img.shields.io/badge/Instruction-Coverage-85%25-brightgreen)
+![Line Coverage](https://img.shields.io/badge/Line-Coverage-80%25-yellow)
+![Branch Coverage](https://img.shields.io/badge/Branch-Coverage-70%25-red)
+![Complexity Coverage](https://img.shields.io/badge/Complexity-Coverage-60%25-red)
+![Method Coverage](https://img.shields.io/badge/Method-Coverage-75%25-yellow)
+![Class Coverage](https://img.shields.io/badge/Class-Coverage-90%25-brightgreen)
+![Overall Coverage](https://img.shields.io/badge/Overall-Coverage-78%25-yellow)
 
 </div>
 
