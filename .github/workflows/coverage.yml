@@ -98,5 +98,8 @@ jobs:
             TARGET_BRANCH="${{ github.ref_name }}"
           fi
           
+          # Pull the latest changes from the remote branch to avoid conflicts
+          git pull origin "${TARGET_BRANCH}" --rebase || echo "No changes to pull"
+          
           # Push to the dynamically determined branch
           git push origin HEAD:"${TARGET_BRANCH}"
