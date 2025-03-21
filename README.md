@@ -8,7 +8,7 @@
   <h2>SpringBoot Reporting Service</h2>
   <p>A demo project for generating reports using JasperReports Libraries & SpringBoot.</p>
 
-![Code Coverage](https://img.shields.io/badge/coverage-17%25-red)
+![Code Coverage](https://img.shields.io/badge/coverage-16%25-red)
 
 </div>
 
