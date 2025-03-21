@@ -90,16 +90,16 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git add README.md
           git commit -m "Update README with latest coverage badge" || echo "No changes to commit"
-          
+
           # Dynamically determine the branch to push to
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            TARGET_BRANCH="${{ github.base_ref }}"
+            TARGET_BRANCH="${{ github.head_ref }}"
           else
             TARGET_BRANCH="${{ github.ref_name }}"
           fi
-          
+
           # Pull the latest changes from the remote branch to avoid conflicts
           git pull origin "${TARGET_BRANCH}" --rebase || echo "No changes to pull"
-          
+
           # Push to the dynamically determined branch
           git push origin HEAD:"${TARGET_BRANCH}"
