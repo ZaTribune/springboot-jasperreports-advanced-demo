@@ -29,8 +29,7 @@ jobs:
 
       # Step 3: Build the project and generate JaCoCo report
       - name: Build Project and Generate Coverage Report
-        run: |
-          ./mvnw clean verify
+        run: mvn clean verify
 
       # Step 4: Extract Coverage Percentages for Each Type
       - name: Extract Coverage Percentages
