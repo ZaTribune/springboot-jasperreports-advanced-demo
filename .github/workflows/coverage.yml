@@ -1,15 +1,14 @@
 name: Update README with Coverage Badge
 
 on:
-  # Trigger on pull requests targeting the main branch
+  # Trigger on pull requests
   pull_request:
-    branches:
-      - master
+    types: [opened, synchronize, reopened] # Trigger on PR open, update, or reopen
 
-  # Trigger on pushes to the main branch
+  # Trigger on pushes to any branch
   push:
     branches:
-      - master
+      - '**' # Matches all branches
 
 jobs:
   update-readme:
@@ -91,4 +90,13 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git add README.md
           git commit -m "Update README with latest coverage badge" || echo "No changes to commit"
-          git push
+          
+          # Dynamically determine the branch to push to
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            TARGET_BRANCH="${{ github.base_ref }}"
+          else
+            TARGET_BRANCH="${{ github.ref_name }}"
+          fi
+          
+          # Push to the dynamically determined branch
+          git push origin HEAD:"${TARGET_BRANCH}"
