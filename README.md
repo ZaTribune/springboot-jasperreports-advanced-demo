@@ -8,6 +8,8 @@
   <h2>SpringBoot Reporting Service</h2>
   <p>A demo project for generating reports using JasperReports Libraries & SpringBoot.</p>
 
+![Code Coverage](https://img.shields.io/badge/coverage-0%25-red)
+
 [![codecov](https://codecov.io/gh/zatribune/springboot-jasperreports-advanced-demo/graph/badge.svg?token=STPROBEOTZ)](https://codecov.io/gh/zatribune/springboot-jasperreports-advanced-demo)
 </div>
 

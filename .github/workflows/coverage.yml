@@ -1,0 +1,92 @@
+name: Update README with Overall Coverage Badge
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Java (adjust version if needed)
+      - name: Set Up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Step 3: Build the project and generate JaCoCo report
+      - name: Build Project and Generate Coverage Report
+        run: |
+          ./mvnw clean verify
+
+      # Step 4: Extract Coverage Percentages for Each Type
+      - name: Extract Coverage Percentages
+        id: coverage
+        run: |
+          # Extract totals for each type
+          INSTRUCTION_MISSED=$(grep -oP 'type="INSTRUCTION".*?missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+          INSTRUCTION_COVERED=$(grep -oP 'type="INSTRUCTION".*?covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+
+          LINE_MISSED=$(grep -oP 'type="LINE".*?missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+          LINE_COVERED=$(grep -oP 'type="LINE".*?covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+
+          BRANCH_MISSED=$(grep -oP 'type="BRANCH".*?missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+          BRANCH_COVERED=$(grep -oP 'type="BRANCH".*?covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+
+          METHOD_MISSED=$(grep -oP 'type="METHOD".*?missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+          METHOD_COVERED=$(grep -oP 'type="METHOD".*?covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+
+          CLASS_MISSED=$(grep -oP 'type="CLASS".*?missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+          CLASS_COVERED=$(grep -oP 'type="CLASS".*?covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+
+          # Calculate percentages for each type
+          INSTRUCTION_PERCENTAGE=$((INSTRUCTION_COVERED * 100 / (INSTRUCTION_MISSED + INSTRUCTION_COVERED)))
+          LINE_PERCENTAGE=$((LINE_COVERED * 100 / (LINE_MISSED + LINE_COVERED)))
+          BRANCH_PERCENTAGE=$((BRANCH_COVERED * 100 / (BRANCH_MISSED + BRANCH_COVERED)))
+          METHOD_PERCENTAGE=$((METHOD_COVERED * 100 / (METHOD_MISSED + METHOD_COVERED)))
+          CLASS_PERCENTAGE=$((CLASS_COVERED * 100 / (CLASS_MISSED + CLASS_COVERED)))
+
+          # Calculate overall coverage as a weighted average
+          OVERALL_PERCENTAGE=$(( (INSTRUCTION_PERCENTAGE + LINE_PERCENTAGE + BRANCH_PERCENTAGE + METHOD_PERCENTAGE + CLASS_PERCENTAGE) / 5 ))
+
+          # Save overall coverage percentage as an environment variable
+          echo "overall_coverage=$OVERALL_PERCENTAGE" >> $GITHUB_ENV
+
+      # Step 5: Update README.md with Coverage Badge
+      - name: Update README with Coverage Badge
+        run: |
+          # Define the badge URL
+          BADGE_URL="https://img.shields.io/badge/coverage-${{ env.overall_coverage }}%25"
+          
+          # Set badge color based on coverage percentage
+          if [ "${{ env.overall_coverage }}" -ge 90 ]; then
+            BADGE_COLOR="brightgreen"
+          elif [ "${{ env.overall_coverage }}" -ge 75 ]; then
+            BADGE_COLOR="yellow"
+          else
+            BADGE_COLOR="red"
+          fi
+
+          BADGE_URL="${BADGE_URL}-${BADGE_COLOR}"
+
+          # Replace the existing badge in README.md
+          sed -i "s|!\[Code Coverage\](https://img.shields.io/badge/coverage-[0-9]*%25-[a-z]*)|![Code Coverage](${BADGE_URL})|" README.md
+
+      # Step 6: Commit and Push the Updated README.md
+      - name: Commit and Push Updated README
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add README.md
+          git commit -m "Update README with latest coverage badge" || echo "No changes to commit"
+          git push
