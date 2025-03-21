@@ -10,7 +10,6 @@
 
 ![Code Coverage](https://img.shields.io/badge/coverage-17%25-red)
 
-[![codecov](https://codecov.io/gh/zatribune/springboot-jasperreports-advanced-demo/graph/badge.svg?token=STPROBEOTZ)](https://codecov.io/gh/zatribune/springboot-jasperreports-advanced-demo)
 </div>
 
 ## Built with

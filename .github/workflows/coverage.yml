@@ -43,6 +43,9 @@ jobs:
 
           BRANCH_MISSED=$(grep -oP 'type="BRANCH".*?missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
           BRANCH_COVERED=$(grep -oP 'type="BRANCH".*?covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+          
+          COMPLEXITY_MISSED=$(grep -oP 'type="COMPLEXITY".*?missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+          COMPLEXITY_COVERED=$(grep -oP 'type="COMPLEXITY".*?covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
 
           METHOD_MISSED=$(grep -oP 'type="METHOD".*?missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
           METHOD_COVERED=$(grep -oP 'type="METHOD".*?covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
@@ -54,11 +57,12 @@ jobs:
           INSTRUCTION_PERCENTAGE=$((INSTRUCTION_COVERED * 100 / (INSTRUCTION_MISSED + INSTRUCTION_COVERED)))
           LINE_PERCENTAGE=$((LINE_COVERED * 100 / (LINE_MISSED + LINE_COVERED)))
           BRANCH_PERCENTAGE=$((BRANCH_COVERED * 100 / (BRANCH_MISSED + BRANCH_COVERED)))
+          COMPLEXITY_PERCENTAGE=$((COMPLEXITY_COVERED * 100 / (COMPLEXITY_MISSED + COMPLEXITY_COVERED)))
           METHOD_PERCENTAGE=$((METHOD_COVERED * 100 / (METHOD_MISSED + METHOD_COVERED)))
           CLASS_PERCENTAGE=$((CLASS_COVERED * 100 / (CLASS_MISSED + CLASS_COVERED)))
 
           # Calculate overall coverage as a weighted average
-          OVERALL_PERCENTAGE=$(( (INSTRUCTION_PERCENTAGE + LINE_PERCENTAGE + BRANCH_PERCENTAGE + METHOD_PERCENTAGE + CLASS_PERCENTAGE) / 5 ))
+          OVERALL_PERCENTAGE=$(( (INSTRUCTION_PERCENTAGE + LINE_PERCENTAGE + BRANCH_PERCENTAGE + COMPLEXITY_PERCENTAGE + METHOD_PERCENTAGE + CLASS_PERCENTAGE) / 6 ))
 
           # Save overall coverage percentage as an environment variable
           echo "overall_coverage=$OVERALL_PERCENTAGE"
