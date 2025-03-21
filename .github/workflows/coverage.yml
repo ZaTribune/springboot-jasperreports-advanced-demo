@@ -95,13 +95,13 @@ jobs:
           }
 
           # Generate badges for each type
-          INSTRUCTION_BADGE=$(generate_badge "Instruction-Coverage" "${{ env.instruction_coverage }}")
-          LINE_BADGE=$(generate_badge "Line-Coverage" "${{ env.line_coverage }}")
-          BRANCH_BADGE=$(generate_badge "Branch-Coverage" "${{ env.branch_coverage }}")
-          COMPLEXITY_BADGE=$(generate_badge "Complexity-Coverage" "${{ env.complexity_coverage }}")
-          METHOD_BADGE=$(generate_badge "Method-Coverage" "${{ env.method_coverage }}")
-          CLASS_BADGE=$(generate_badge "Class-Coverage" "${{ env.class_coverage }}")
-          OVERALL_BADGE=$(generate_badge "Overall-Coverage" "${{ env.overall_coverage }}")
+          INSTRUCTION_BADGE=$(generate_badge "Instruction_Coverage" "${{ env.instruction_coverage }}")
+          LINE_BADGE=$(generate_badge "Line_Coverage" "${{ env.line_coverage }}")
+          BRANCH_BADGE=$(generate_badge "Branch_Coverage" "${{ env.branch_coverage }}")
+          COMPLEXITY_BADGE=$(generate_badge "Complexity_Coverage" "${{ env.complexity_coverage }}")
+          METHOD_BADGE=$(generate_badge "Method_Coverage" "${{ env.method_coverage }}")
+          CLASS_BADGE=$(generate_badge "Class_Coverage" "${{ env.class_coverage }}")
+          OVERALL_BADGE=$(generate_badge "Overall_Coverage" "${{ env.overall_coverage }}")
 
           # Replace placeholders in README.md with badges
           sed -i "s|!\[Instruction Coverage\](.*)|![Instruction Coverage](${INSTRUCTION_BADGE})|" README.md
