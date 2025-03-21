@@ -61,6 +61,7 @@ jobs:
           OVERALL_PERCENTAGE=$(( (INSTRUCTION_PERCENTAGE + LINE_PERCENTAGE + BRANCH_PERCENTAGE + METHOD_PERCENTAGE + CLASS_PERCENTAGE) / 5 ))
 
           # Save overall coverage percentage as an environment variable
+          echo "overall_coverage=$OVERALL_PERCENTAGE"
           echo "overall_coverage=$OVERALL_PERCENTAGE" >> $GITHUB_ENV
 
       # Step 5: Update README.md with Coverage Badge
