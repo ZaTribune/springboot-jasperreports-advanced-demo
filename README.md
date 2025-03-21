@@ -41,9 +41,8 @@
 - **Multilingual Support**: Handles both `LTR` (Left-to-Right) and `RTL` (Right-to-Left) languages like English and Arabic.
 - **Output Formats**: Supports multiple formats, including `PDF`, `XLS`, `CSV`, and `HTML`.
 - **Documentation**: Includes "how-to" notes for different workflows (in progress).
-
+- **Code Coverage**: This project uses JaCoCo for code coverage and GitHub Actions to generate and display the coverage percentage directly in this README.
 ## Steps to deploy
-
 - Load this project on your preferred IDE, and Maven will load all dependencies
   and configure directories.
 - Every Jasperreports workflow starts with the creation of a template, exported to a `.jrxml` file.
@@ -53,6 +52,7 @@
 - To support multiple languages/locales per record, you will have to create a template for each reportLocale.
 - (Optional) You can use the `LibreTranslate API` - [docs](https://github.com/LibreTranslate/LibreTranslate/blob/main/README.md).
   - Install locally [here](local).
+
 ### First Example
 - On the first example, I've provided two templates {`invoice_en`, `invoice_ar`} representing the two reportLocale
   implementations of a report called invoice.
