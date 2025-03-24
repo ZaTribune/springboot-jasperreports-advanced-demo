@@ -1,31 +1,31 @@
-package com.tribune.demo.reporting.db.entities;
+package com.tribune.demo.reporting.db.entity;
 
-
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import jakarta.persistence.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "REPORT_TABLE_COLUMN")
+@Table(name = "REPORT_FIELD")
 @Entity
-public class ReportTableColumn {
+public class ReportField {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //name of the property on json or pdfRequest
     private String name;
-
     private String description;
 
-    public ReportTableColumn(String name) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "report", referencedColumnName = "id")
+    private Report report;
+
+
+    public ReportField(String name) {
         this.name = name;
     }
 
-    @ManyToOne
-    private ReportTable reportTable;
 }

@@ -17,8 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import com.tribune.demo.reporting.config.ResourcesLoader;
-import com.tribune.demo.reporting.db.entities.Report;
-import com.tribune.demo.reporting.db.entities.ReportLocale;
+import com.tribune.demo.reporting.db.entity.Report;
+import com.tribune.demo.reporting.db.entity.ReportLocale;
 import com.tribune.demo.reporting.error.BadReportEntryException;
 import com.tribune.demo.reporting.error.UnsupportedItemException;
 import com.tribune.demo.reporting.model.ReportEntry;
@@ -30,7 +30,6 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 

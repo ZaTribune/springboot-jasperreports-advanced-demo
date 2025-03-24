@@ -1,9 +1,9 @@
-package com.tribune.demo.reporting.db.repositories;
+package com.tribune.demo.reporting.db.repository;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.lang.NonNull;
-import com.tribune.demo.reporting.db.entities.Report;
+import com.tribune.demo.reporting.db.entity.Report;
 
 
 import java.util.Optional;

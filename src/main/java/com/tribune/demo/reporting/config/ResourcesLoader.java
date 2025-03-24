@@ -10,11 +10,11 @@ import net.sf.jasperreports.engine.JasperReport;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import com.tribune.demo.reporting.db.entities.Report;
-import com.tribune.demo.reporting.db.entities.ReportImage;
-import com.tribune.demo.reporting.db.entities.ReportLocale;
-import com.tribune.demo.reporting.db.entities.ReportTable;
-import com.tribune.demo.reporting.db.repositories.ReportRepository;
+import com.tribune.demo.reporting.db.entity.Report;
+import com.tribune.demo.reporting.db.entity.ReportImage;
+import com.tribune.demo.reporting.db.entity.ReportLocale;
+import com.tribune.demo.reporting.db.entity.ReportTable;
+import com.tribune.demo.reporting.db.repository.ReportRepository;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

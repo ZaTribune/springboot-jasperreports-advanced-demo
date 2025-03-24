@@ -1,9 +1,9 @@
 package com.tribune.demo.reporting.error;
 
 
-import com.tribune.demo.reporting.db.entities.Report;
-import com.tribune.demo.reporting.db.entities.ReportField;
-import com.tribune.demo.reporting.db.entities.ReportTable;
+import com.tribune.demo.reporting.db.entity.Report;
+import com.tribune.demo.reporting.db.entity.ReportField;
+import com.tribune.demo.reporting.db.entity.ReportTable;
 
 import java.util.stream.Collectors;
 

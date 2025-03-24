@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(MockitoExtension.class)
 class TranslatorTest {
 
-    Translator translator = new LibreTranslator();
+    Translator translator;
 
     static MockWebServer mockWebServer;
 
@@ -38,8 +39,12 @@ class TranslatorTest {
         mockWebServer = new MockWebServer();
         mockWebServer.start();
 
+        WebClient webClient = WebClient.builder()
+                .baseUrl(mockWebServer.url("/").toString())
+                .build();
+
         // Initialize the class under test
-        translator = new LibreTranslator();
+        translator = new LibreTranslator(webClient);
 
         // Inject the mock server URL
         ReflectionTestUtils.setField(translator, "url", mockWebServer.url("/translate").toString());
@@ -66,15 +71,13 @@ class TranslatorTest {
 
         mockWebServer.enqueue(mockResponse);
 
-        // Act
         String result = translator.translate(textToTranslate, from, to);
 
-        // Assert
         assertEquals(translatedText, result);
     }
 
     @Test
-    void translate_shouldReturnEmptyStringWhenResponseIsEmpty() {
+    void translate_shouldReturnOriginalWhenResponseIsEmpty() {
         // Arrange
         String textToTranslate = "Hello";
         String from = "en";
@@ -86,11 +89,9 @@ class TranslatorTest {
 
         mockWebServer.enqueue(mockResponse);
 
-        // Act
         String result = translator.translate(textToTranslate, from, to);
 
-        // Assert
-        assertEquals("", result);
+        assertEquals(textToTranslate, result);
     }
 
     @Test
@@ -101,17 +102,19 @@ class TranslatorTest {
         String to = "ar";
 
         MockResponse mockResponse = new MockResponse()
-                .setBody("{\"translatedText\":\"Hola\"}")
+                .setBody("""
+                        {
+                          "translatedText":"Hola"
+                        }
+                        """)
                 .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .setResponseCode(200)
                 .setBodyDelay(5, TimeUnit.SECONDS); // Simulate server delay
 
         mockWebServer.enqueue(mockResponse);
 
-        // Act
         String result = translator.translate(textToTranslate, from, to);
 
-        // Assert
         assertEquals(textToTranslate, result); // Timeout should result in an empty string
     }
 }

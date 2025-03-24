@@ -1,4 +1,4 @@
-package com.tribune.demo.reporting.db.entities;
+package com.tribune.demo.reporting.db.entity;
 
 
 import lombok.Getter;
