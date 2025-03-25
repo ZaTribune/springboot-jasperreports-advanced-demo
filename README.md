@@ -26,7 +26,6 @@
 </div>
 
 ## Built with
-
 - Java (JDK 17 or later).
 - Jasperreports.
 - TIBCO Jaspersoft Studio (Community Edition).
@@ -40,8 +39,8 @@
 - **Performance**: Tested with JMeter for up to 1000 requests, averaging 45 seconds for 1000 PDFs.
 - **Multilingual Support**: Handles both `LTR` (Left-to-Right) and `RTL` (Right-to-Left) languages like English and Arabic.
 - **Output Formats**: Supports multiple formats, including `PDF`, `XLS`, `CSV`, and `HTML`.
-- **Documentation**: Includes "how-to" notes for different workflows (in progress).
 - **Code Coverage**: This project uses JaCoCo for code coverage and GitHub Actions to generate and display the coverage percentage directly in this README.
+
 ## Steps to deploy
 - Load this project on your preferred IDE, and Maven will load all dependencies
   and configure directories.
@@ -70,14 +69,12 @@
 - Also, two samples {`receipt_en`, `receipt_ar`} are provided.
 
 ## Testing
-
 - Provided with two testing templates for both types of models, You can use Postman for testing
   by importing this [collections file](samples/jasperreports.postman_collection.json).
 - Also, you can use [swagger-ui]("http://localhost:8083/swagger-ui/index.html) for reference.
 - A [console.sql](samples/console.sql) file is added here to validate the db.
 
 ## Preview
-
 <p align="center">
   <reportTable>
     <tr>
@@ -87,20 +84,17 @@
   </reportTable>
 </p> 
 
-## License
+## Notes
+- Numeric values used on the project are Integer, Double.
+- BigDecimal values are rendered as String within jrxml files.
 
+## License
 This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
-
 - Special thanks to the JasperReports community for providing a powerful reporting library.
 - Thanks to the LibreTranslate team for providing a reliable translation service.
 - Gratitude to the Spring Boot team for making it easy to integrate with Spring applications.
 
 ## Authors
-
 [![Linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white&label=Muhammad%20Ali)](https://linkedin.com/in/zatribune)
-
-
- 
- 

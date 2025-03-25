@@ -7,7 +7,7 @@ import com.tribune.demo.reporting.db.entity.ReportTable;
 
 import java.util.stream.Collectors;
 
-public class BadReportEntryException extends NullPointerException {
+public class BadReportEntryException extends RuntimeException {
 
     public BadReportEntryException(String entry, Report report) {
         super(

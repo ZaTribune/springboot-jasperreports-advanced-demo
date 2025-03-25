@@ -1,5 +1,6 @@
 package com.tribune.demo.reporting.util.processor;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -8,27 +9,21 @@ import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.pdf.SimplePdfExporterConfiguration;
 import net.sf.jasperreports.pdf.SimplePdfReportConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.tribune.demo.reporting.config.jasperreports.PdfExportConfig;
-import com.tribune.demo.reporting.config.jasperreports.PdfReportConfig;
+import com.tribune.demo.reporting.config.reporting.PdfExportConfig;
+import com.tribune.demo.reporting.config.reporting.PdfReportConfig;
 import com.tribune.demo.reporting.model.ReportExportType;
 
 import java.io.OutputStream;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class PdfOutputProcessor implements OutputProcessor{
 
     private final PdfReportConfig pdfReportConfig;
 
     private final PdfExportConfig pdfExportConfig;
-
-    @Autowired
-    public PdfOutputProcessor(PdfReportConfig pdfReportConfig,PdfExportConfig pdfExportConfig) {
-        this.pdfReportConfig = pdfReportConfig;
-        this.pdfExportConfig = pdfExportConfig;
-    }
 
     @Override
     public void export(JasperPrint jasperPrint, OutputStream outputStream) throws JRException {

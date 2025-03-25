@@ -1,4 +1,4 @@
-package com.tribune.demo.reporting.config.jasperreports;
+package com.tribune.demo.reporting.config.reporting;
 
 import lombok.Getter;
 import lombok.Setter;

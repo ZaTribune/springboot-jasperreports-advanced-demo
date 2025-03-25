@@ -1,5 +1,6 @@
 package com.tribune.demo.reporting.util.processor;
 
+import com.tribune.demo.reporting.model.ReportExportType;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -8,20 +9,19 @@ import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 import org.springframework.stereotype.Service;
-import com.tribune.demo.reporting.model.ReportExportType;
 
 import java.io.OutputStream;
 
 @Slf4j
 @Service
-public class XlsOutputProcessor implements OutputProcessor{
+public class XlsOutputProcessor implements OutputProcessor {
 
-/**
- * <pre><code>
- *    exporter.setExporterOutput(
- *        new SimpleOutputStreamExporterOutput(outputPath + "/" + name + ".xls"));
- * </code></pre>
- **/
+    /**
+     * <pre><code>
+     *    exporter.setExporterOutput(
+     *        new SimpleOutputStreamExporterOutput(outputPath + "/" + name + ".xls"));
+     * </code></pre>
+     **/
     @Override
     public void export(JasperPrint jasperPrint, OutputStream outputStream) throws JRException {
         JRXlsxExporter exporter = new JRXlsxExporter();

@@ -1,8 +1,7 @@
 package com.tribune.demo.reporting.config;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import com.tribune.demo.reporting.error.BadReportEntryException;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -25,14 +24,12 @@ import java.util.Map;
 
 
 @Slf4j
-@Getter
-@Setter
 @Component
 public class ResourcesLoader implements CommandLineRunner {
 
 
-    private Map<Long, JasperReport> jasperReports = new HashMap<>(1);
-    private Map<Long, BufferedImage> images = new HashMap<>(1);
+    private final Map<Long, JasperReport> jasperReports = new HashMap<>(1);
+    private final Map<Long, BufferedImage> images = new HashMap<>(1);
 
     private final ReportRepository reportRepository;
 
@@ -118,4 +115,16 @@ public class ResourcesLoader implements CommandLineRunner {
         });
     }
 
+    public Report getReport(Long id) {
+        return reportRepository.findById(id)
+                .orElseThrow(() -> new BadReportEntryException("reportId", "No Report found by the given id."));
+    }
+
+    public JasperReport getJasperReport(Long id) {
+        return jasperReports.get(id);
+    }
+
+    public BufferedImage getImage(Long id) {
+        return images.get(id);
+    }
 }

@@ -1,0 +1,23 @@
+<!-- Created with Jaspersoft Studio version 7.0.2.final using JasperReports Library version 7.0.2-31532122640f516c6d17238ae0e41a08113d5ac0  -->
+<jasperReport name="sample_report" language="java" pageWidth="595" pageHeight="842" whenNoDataType="NoPages" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c4936641-fe35-4c0d-9a43-aba6fdda8a43">
+	<field name="name" class="java.lang.String"/>
+	<field name="age" class="java.lang.Integer"/>
+	<columnHeader height="20" splitType="Stretch">
+		<element kind="staticText" x="0" y="0">
+			<text><![CDATA[Name]]></text>
+		</element>
+		<element kind="staticText" x="220" y="0">
+			<text><![CDATA[Age]]></text>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<element x="0" y="0">
+				<expression><![CDATA[$F{name}]]></expression>
+			</element>
+			<element x="220" y="0">
+				<expression><![CDATA[$F{age}]]></expression>
+			</element>
+		</band>
+	</detail>
+</jasperReport>

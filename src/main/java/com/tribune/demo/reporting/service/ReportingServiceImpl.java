@@ -5,6 +5,16 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import com.tribune.demo.reporting.config.ResourcesLoader;
+import com.tribune.demo.reporting.db.entity.Report;
+import com.tribune.demo.reporting.db.entity.ReportLocale;
+import com.tribune.demo.reporting.error.BadReportEntryException;
+import com.tribune.demo.reporting.error.UnsupportedItemException;
+import com.tribune.demo.reporting.model.ReportEntry;
+import com.tribune.demo.reporting.model.ReportExportType;
+import com.tribune.demo.reporting.model.ReportRequest;
+import com.tribune.demo.reporting.util.processor.DynamicOutputProcessor;
+import com.tribune.demo.reporting.util.translator.Translator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
@@ -16,18 +26,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import com.tribune.demo.reporting.config.ResourcesLoader;
-import com.tribune.demo.reporting.db.entity.Report;
-import com.tribune.demo.reporting.db.entity.ReportLocale;
-import com.tribune.demo.reporting.error.BadReportEntryException;
-import com.tribune.demo.reporting.error.UnsupportedItemException;
-import com.tribune.demo.reporting.model.ReportEntry;
-import com.tribune.demo.reporting.model.ReportExportType;
-import com.tribune.demo.reporting.model.ReportRequest;
-import com.tribune.demo.reporting.util.translator.Translator;
-import com.tribune.demo.reporting.util.processor.DynamicOutputProcessorService;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-
 
 import java.io.ByteArrayInputStream;
 import java.util.*;
@@ -41,7 +40,7 @@ public class ReportingServiceImpl implements ReportingService {
 
     private final ResourcesLoader resourcesLoader;
 
-    private final DynamicOutputProcessorService outputProcessor;
+    private final DynamicOutputProcessor outputProcessor;
 
     private final MessageSource messageSource;
     private final Translator translator;
@@ -57,15 +56,13 @@ public class ReportingServiceImpl implements ReportingService {
      * <code>JRSaver.saveObject(jasperReport, " employeeReport.jasper ");</code>
      * </pre>
      **/
-
     @Override
     public StreamingResponseBody generateFromModel(ReportRequest reportRequest, ReportExportType accept)
             throws JRException, UnsupportedItemException {
         log.info("generateFromModel() - XThread: {}", Thread.currentThread().getName());
 
         //first check for report existence
-        Report report = resourcesLoader.getReportRepository().findById(reportRequest.getReportId())
-                .orElseThrow(() -> new BadReportEntryException("reportId", "No Report found by the given id."));
+        Report report = resourcesLoader.getReport(reportRequest.getReportId());
 
         //then, check for locale match meaning: (a template that supports the language requested by the user).
         ReportLocale reportLocale = report.getLocales().stream()
@@ -75,7 +72,7 @@ public class ReportingServiceImpl implements ReportingService {
 
         Map<String, Object> parametersMap = processReportRequest(report, reportRequest.getData());
 
-        JasperPrint jasperPrint = JasperFillManager.fillReport(resourcesLoader.getJasperReports().get(reportLocale.getId())
+        JasperPrint jasperPrint = getPrint(resourcesLoader.getJasperReport(reportLocale.getId())
                 , parametersMap
                 , new JREmptyDataSource());
 
@@ -98,20 +95,21 @@ public class ReportingServiceImpl implements ReportingService {
             parametersMap.put(reportName, inputMap.get(reportName));
         else
             parametersMap.put(reportName, report.getName());
-        // first extract lists
-        report.getReportTables().parallelStream().forEach(reportList -> {
-            // initialize a list for each report list -->to be injected to the JasperReport
+        // first extract tables
+        report.getReportTables().parallelStream().forEach(reportTable -> {
+            // initialize a list for each reportTable --> to be injected to the JasperReport
             List<Map<?, ?>> injectedList = new ArrayList<>();
             //get the list using its name defined on DB
-            List<?> list = Optional.ofNullable((List<?>) inputMap.get(reportList.getName()))
-                    .orElseThrow(() -> new BadReportEntryException(reportList.getName(), report));
+            //todo: impose reportTable Name
+            List<?> list = Optional.ofNullable((List<?>) inputMap.get(reportTable.getName()))
+                    .orElseThrow(() -> new BadReportEntryException(reportTable.getName(), report));
 
             list.forEach(listItem ->
                     //for each map/entry on the list
                     injectedList.add(((Map<?, ?>) listItem))
             );
-            //finally, add the list
-            parametersMap.put(reportList.getName(), new JRBeanCollectionDataSource(injectedList));
+            //finally, add the table
+            parametersMap.put(reportTable.getName(), new JRBeanCollectionDataSource(injectedList));
         });
 
         // then extract first level fields
@@ -127,7 +125,7 @@ public class ReportingServiceImpl implements ReportingService {
         report.getImages().parallelStream().forEach(img ->
                 parametersMap.put(
                         img.getName(),
-                        Optional.ofNullable(resourcesLoader.getImages().get(img.getId()))
+                        Optional.ofNullable(resourcesLoader.getImage(img.getId()))
                                 .orElseThrow(() -> new BadReportEntryException(img.getName(), report))
                 ));
 
@@ -136,7 +134,7 @@ public class ReportingServiceImpl implements ReportingService {
 
     @Override
     public StreamingResponseBody generateDirect(ObjectNode reportRequest, String reportTitle, String language,
-                               ReportExportType accept) throws JRException {
+                                                ReportExportType accept) throws JRException {
         log.info("generateDirect() - XThread: {}", Thread.currentThread().getName());
         Map<String, Object> parametersMap = new HashMap<>();
 
@@ -169,23 +167,21 @@ public class ReportingServiceImpl implements ReportingService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
         //todo: pass report id
-        Report report = resourcesLoader.getReportRepository()
-                .findById(2L)
-                .orElseThrow();
+        Report report = resourcesLoader.getReport(2L);
 
         parametersMap.put("title", StringUtils.defaultIfBlank(reportTitle, report.getName()));
         report.getImages().forEach(img ->
                 parametersMap.put(
                         img.getName(),
-                        Optional.ofNullable(resourcesLoader.getImages().get(img.getId()))
+                        Optional.ofNullable(resourcesLoader.getImage(img.getId()))
                                 .orElseThrow(() -> new BadReportEntryException(img.getName(), img.getName()))
                 ));
         //check if locale is supported and return the ReportLocale
         ReportLocale reportLocale =
                 report.getLocales().stream().filter(lo -> lo.getContent().equalsIgnoreCase(language))
                         .findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requested Locale is not supported."));
-        JasperReport jasperReport = resourcesLoader.getJasperReports().get(reportLocale.getId());
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport
+        JasperReport jasperReport = resourcesLoader.getJasperReport(reportLocale.getId());
+        JasperPrint jasperPrint = getPrint(jasperReport
                 , parametersMap
                 , new JREmptyDataSource());
 
@@ -236,4 +232,9 @@ public class ReportingServiceImpl implements ReportingService {
     }
 
 
+    public JasperPrint getPrint(JasperReport jasperReport, Map<String, Object> parametersMap, JRDataSource dataSource) throws JRException {
+        return JasperFillManager.fillReport(jasperReport
+                , parametersMap
+                , dataSource);
+    }
 }
