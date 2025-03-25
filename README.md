@@ -12,13 +12,13 @@
   <h3 style="margin: 0; font-size: 1.5em;">📊 Code Coverage</h3>
   <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
 
-   ![Instruction Coverage](https://img.shields.io/badge/Instruction-17.41%25-red)
-   ![Line Coverage](https://img.shields.io/badge/Line-14.2%25-red)
-   ![Branch Coverage](https://img.shields.io/badge/Branch-20.0%25-red)
-   ![Complexity Coverage](https://img.shields.io/badge/Complexity-12.82%25-red)
-   ![Method Coverage](https://img.shields.io/badge/Method-12.33%25-red)
-   ![Class Coverage](https://img.shields.io/badge/Class-21.43%25-red)
-   ![Overall Coverage](https://img.shields.io/badge/Overall-16.5%25-red)
+   ![Instruction Coverage](https://img.shields.io/badge/Instruction-37.38%25-red)
+   ![Line Coverage](https://img.shields.io/badge/Line-35.14%25-red)
+   ![Branch Coverage](https://img.shields.io/badge/Branch-30.0%25-red)
+   ![Complexity Coverage](https://img.shields.io/badge/Complexity-38.16%25-red)
+   ![Method Coverage](https://img.shields.io/badge/Method-39.44%25-red)
+   ![Class Coverage](https://img.shields.io/badge/Class-90.91%25-brightgreen)
+   ![Overall Coverage](https://img.shields.io/badge/Overall-37.37%25-red)
 
   </div>
 </div>
