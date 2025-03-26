@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,5 +31,10 @@ public class ReportImage {
     }
 
     @ManyToMany(mappedBy = "images")
-    private Set<Report> reports=new HashSet<>(1);
+    private Set<Report> reports = new HashSet<>(1);
+
+    @Override
+    public String toString() {
+        return String.format("image: {\"id\":%d, \"name\": %s}", id, name);
+    }
 }

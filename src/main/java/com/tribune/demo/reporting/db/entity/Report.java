@@ -72,7 +72,7 @@ public class Report {
     }
 
     public List<String> getReportLocalesValues() {
-        return locales.stream().map(ReportLocale::getContent).collect(Collectors.toList());
+        return locales.stream().map(ReportLocale::getContent).sorted().toList();
     }
 
 }

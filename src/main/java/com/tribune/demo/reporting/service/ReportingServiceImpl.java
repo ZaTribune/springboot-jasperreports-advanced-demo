@@ -125,8 +125,8 @@ public class ReportingServiceImpl implements ReportingService {
                 parametersMap.put(
                         img.getName(),
                         Optional.ofNullable(resourcesLoader.getImage(img.getId()))
-                                .orElseThrow(() -> new BadReportEntryException(img.getName(), report))
-                ));
+                                .orElseThrow(() -> new BadReportEntryException(String.format("Unable to load the following %s", img))))
+                );
 
         return parametersMap;
     }
@@ -166,16 +166,19 @@ public class ReportingServiceImpl implements ReportingService {
         Report report = resourcesLoader.getReport(2L);
 
         parametersMap.put("title", StringUtils.defaultIfBlank(reportTitle, report.getName()));
-        report.getImages().forEach(img ->
-                parametersMap.put(
-                        img.getName(),
-                        Optional.ofNullable(resourcesLoader.getImage(img.getId()))
-                                .orElseThrow(() -> new BadReportEntryException(img.getName(), img.getName()))
-                ));
+
         //check if locale is supported and return the ReportLocale
         ReportLocale reportLocale =
                 report.getLocales().stream().filter(lo -> lo.getContent().equalsIgnoreCase(language))
                         .findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requested Locale is not supported."));
+
+        report.getImages().forEach(img ->
+                parametersMap.put(
+                        img.getName(),
+                        Optional.ofNullable(resourcesLoader.getImage(img.getId()))
+                                .orElseThrow(() -> new BadReportEntryException(String.format("Unable to load the following %s", img)))
+                ));
+
         JasperReport jasperReport = resourcesLoader.getJasperReport(reportLocale.getId());
         JasperPrint jasperPrint = getPrint(jasperReport
                 , parametersMap
