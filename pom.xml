@@ -186,13 +186,14 @@
                 <configuration>
                     <excludes>
                         <exclude>**/.gitignore</exclude>
-                        <exclude>**/*Config</exclude>
-                        <exclude>**/*Application</exclude>
-                        <exclude>**/*Exception</exclude>
-                        <exclude>**/*Properties</exclude>
-                        <exclude>**/*DevBootstrap</exclude>
-                        <exclude>com/tribune/demo/reporting/model/**</exclude>
-                        <exclude>com/tribune/demo/reporting/db/entity/**</exclude>
+                        <exclude>**/*Config.class</exclude>
+                        <exclude>**/*Application.class</exclude>
+                        <exclude>**/*Exception.class</exclude>
+                        <exclude>**/*Properties.class</exclude>
+                        <exclude>**/*DevBootstrap.class</exclude>
+                        <exclude>**/*com/tribune/demo/reporting/model/**/*</exclude>
+                        <exclude>**/*com/tribune/demo/reporting/db/entity/**/*</exclude>
+                        <exclude>**/*com/tribune/demo/reporting/error/**/*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
