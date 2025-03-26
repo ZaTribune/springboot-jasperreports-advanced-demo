@@ -2,6 +2,7 @@ package com.tribune.demo.reporting;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tribune.demo.reporting.db.entity.Report;
 import com.tribune.demo.reporting.db.entity.ReportImage;
 import com.tribune.demo.reporting.db.entity.ReportLocale;
@@ -105,5 +106,20 @@ public class TestUtil {
                 }
                 """;
         return mapper.readValue(json, ReportRequest.class);
+    }
+
+    public static ObjectNode mockDirectReportRequest() throws JsonProcessingException {
+
+        String json = """
+                {
+                    "first name": "Muhammad",
+                    "last name": "Ali",
+                    "phone": "+0000000000",
+                    "address": "Lala Land",
+                    "age": "29",
+                    "gender": "male"
+                }
+                """;
+        return mapper.readValue(json, ObjectNode.class);
     }
 }

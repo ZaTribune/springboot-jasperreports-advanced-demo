@@ -45,7 +45,7 @@ public class ReportingServiceImpl implements ReportingService {
     private final MessageSource messageSource;
     private final Translator translator;
 
-    @Value("${system.default-language}")
+    @Value("${system.default-language:en}")
     private String defaultLanguage;
 
     /**
@@ -91,10 +91,9 @@ public class ReportingServiceImpl implements ReportingService {
         Map<String, Object> parametersMap = new HashMap<>();
 
         final String reportName = "reportName";//to be within constants
-        if (inputMap.get(reportName) != null)//optional feature to change the default title
-            parametersMap.put(reportName, inputMap.get(reportName));
-        else
-            parametersMap.put(reportName, report.getName());
+        //optional feature to change the default title
+        parametersMap.put(reportName, StringUtils.defaultIfBlank(inputMap.get(reportName).toString(), report.getName()));
+
         // first extract tables
         report.getReportTables().parallelStream().forEach(reportTable -> {
             // initialize a list for each reportTable --> to be injected to the JasperReport
@@ -161,11 +160,8 @@ public class ReportingServiceImpl implements ReportingService {
 
 
         ByteArrayInputStream jsonDataStream = new ByteArrayInputStream(arrayNode.toString().getBytes());
-        try {
-            parametersMap.put("invoiceDataSource", new JsonDataSource(jsonDataStream));
-        } catch (JRException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
+        parametersMap.put("invoiceDataSource", new JsonDataSource(jsonDataStream));
+
         //todo: pass report id
         Report report = resourcesLoader.getReport(2L);
 
@@ -200,15 +196,16 @@ public class ReportingServiceImpl implements ReportingService {
 
         reportRequest.fields().forEachRemaining(entry -> {
 
-            ReportEntry en = new ReportEntry();
+            ReportEntry reportEntry = new ReportEntry();
+            //defaulted to itself
             String name = messageSource.getMessage(entry.getKey(), null, entry.getKey(), Locale.forLanguageTag(language));
 
             if (!language.toLowerCase().equals(defaultLanguage) && StringUtils.equals(name, entry.getKey())) {
-                en.setTranslate(true);
+                reportEntry.setTranslate(true);
             }
-            en.setKey(name);
-            en.setValue(entry.getValue().textValue());
-            entries.add(en);
+            reportEntry.setKey(name);
+            reportEntry.setValue(entry.getValue().textValue());
+            entries.add(reportEntry);
         });
         return entries;
     }
@@ -216,7 +213,7 @@ public class ReportingServiceImpl implements ReportingService {
     public void translateEntries(List<ReportEntry> entries, String concatenatedString, String language) {
 
         log.info("translation input: {}", concatenatedString);
-        concatenatedString = translator.translate(translator.breakCamel(concatenatedString),
+        concatenatedString = translator.translate(concatenatedString,
                 Language.ENGLISH.value(),
                 language);
         log.info("translation output: {}", concatenatedString);

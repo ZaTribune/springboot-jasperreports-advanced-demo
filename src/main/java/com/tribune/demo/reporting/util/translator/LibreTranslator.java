@@ -53,8 +53,9 @@ public class LibreTranslator implements Translator {
     //todo: add a redo to fix the issue when first word can't be translated
     //todo: don't perform requests when translation server is unreachable
     @Override
-    public String translate(String text, String fromLang, String toLang) {
-        log.info("Translating text [{}] to [{}]", text, toLang);
+    public String translate(String input, String fromLang, String toLang) {
+        log.info("Translating text [{}] to [{}]", input, toLang);
+        final String text = breakCamel(input);
         TranslateRequest request = TranslateRequest.builder()
                 .q("\t" + text)//to fix the first word issue when not translated
                 .source(fromLang.toLowerCase())
