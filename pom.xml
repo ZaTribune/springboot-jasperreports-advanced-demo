@@ -191,6 +191,8 @@
                         <exclude>**/*Exception.class</exclude>
                         <exclude>**/*Properties.class</exclude>
                         <exclude>**/*DevBootstrap.class</exclude>
+                        <exclude>**/*Test.class</exclude>
+                        <exclude>**/*IT.class</exclude>
                         <exclude>**/*com/tribune/demo/reporting/model/**/*</exclude>
                         <exclude>**/*com/tribune/demo/reporting/db/entity/**/*</exclude>
                         <exclude>**/*com/tribune/demo/reporting/error/**/*</exclude>

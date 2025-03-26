@@ -37,7 +37,7 @@ import static org.mockito.Mockito.*;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
-class ReportingServiceTest {
+class ReportingServiceImplTest {
 
     @Mock
     ResourcesLoader resourcesLoader;
