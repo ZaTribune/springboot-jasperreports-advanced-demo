@@ -3,6 +3,7 @@ package com.tribune.demo.reporting.error;
 
 import com.tribune.demo.reporting.model.GenericResponse;
 import net.sf.jasperreports.engine.JRException;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -24,12 +25,6 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class RestControllerAdvisor extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(UnsupportedOperationException.class)
-    ResponseEntity<String> handleException(UnsupportedOperationException ex) {
-        //using [ResponseEntity<> class] = using [@ResponseStatus+@ResponseBody]
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_IMPLEMENTED);
-    }
-
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(JRException.class)
@@ -38,7 +33,7 @@ public class RestControllerAdvisor extends ResponseEntityExceptionHandler {
         logger.error(ex.getMessageKey());
         GenericResponse<String> response = GenericResponse.<String>builder()
                 .message(ex.getMessage())
-                .reason(ex.getCause() == null ? new String[]{ex.getLocalizedMessage()} : new String[]{ex.getCause().getMessage()})
+                .reason(ObjectUtils.defaultIfNull(ex.getCause(), ex).getMessage())
                 .code(6001)
                 .build();
         return ResponseEntity.badRequest().body(response);
@@ -51,7 +46,7 @@ public class RestControllerAdvisor extends ResponseEntityExceptionHandler {
         logger.error(ex.getMessage());
         GenericResponse<String> response = GenericResponse.<String>builder()
                 .message(ex.getMessage())
-                .reason(ex.getCause() == null ? new String[]{ex.getLocalizedMessage()} : new String[]{ex.getCause().getMessage()})
+                .reason(ObjectUtils.defaultIfNull(ex.getCause(), ex).getMessage())
                 .code(6002)
                 .build();
         return ResponseEntity.badRequest().body(response);

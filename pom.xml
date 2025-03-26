@@ -190,6 +190,7 @@
                         <exclude>**/*Application.class</exclude>
                         <exclude>**/*Exception.class</exclude>
                         <exclude>**/*Properties.class</exclude>
+                        <exclude>**/DevBootstrap.class</exclude>
                         <exclude>**/*com/tribune/demo/reporting/model/**/*</exclude>
                         <exclude>**/*com/tribune/demo/reporting/db/entity/**/*</exclude>
                         <exclude>**/*com/tribune/demo/reporting/error/**/*</exclude>

@@ -44,13 +44,17 @@ public class TestUtil {
         Report report = new Report();
         report.setId(1L);
         report.setName("Test Report");
+
+
         ReportLocale locale1 = new ReportLocale();
         locale1.setId(1L);
         locale1.setContent("en");
+        locale1.setTemplatePath("src/test/resources/sample_report.jrxml");
 
         ReportLocale locale2 = new ReportLocale();
-        locale2.setId(1L);
+        locale2.setId(2L);
         locale2.setContent("ar");
+        locale2.setTemplatePath("src/test/resources/sample_report.jrxml");
 
         report.addReportLocale(locale1);
         report.addReportLocale(locale2);
@@ -68,9 +72,9 @@ public class TestUtil {
 
         report.addReportTable(table);
 
-        ReportImage img1 = new ReportImage("p1", "/one.png");
+        ReportImage img1 = new ReportImage("p1", "cat.jpg");
         img1.setId(1L);
-        ReportImage img2 = new ReportImage("p2", "/two.png");
+        ReportImage img2 = new ReportImage("p2", "cat.jpg");
         img2.setId(2L);
 
         report.addReportImage(img1);

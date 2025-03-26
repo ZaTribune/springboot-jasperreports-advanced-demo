@@ -51,6 +51,7 @@
 - To support multiple languages/locales per record, you will have to create a template for each reportLocale.
 - (Optional) You can use the `LibreTranslate API` - [docs](https://github.com/LibreTranslate/LibreTranslate/blob/main/README.md).
   - Install locally [here](local).
+- Run the application in `local` profile.
 
 ### First Example
 - On the first example, I've provided two templates {`invoice_en`, `invoice_ar`} representing the two reportLocale
