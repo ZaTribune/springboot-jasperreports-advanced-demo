@@ -1,6 +1,5 @@
 package com.tribune.demo.reporting.service;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tribune.demo.reporting.TestUtil;
 import com.tribune.demo.reporting.config.ResourcesLoader;
 import com.tribune.demo.reporting.db.entity.Report;
@@ -194,7 +193,7 @@ class ReportingServiceImplTest {
     @Test
     void generateDirect_whenSuccessful() throws Exception {
 
-        ObjectNode reportRequest = TestUtil.mockDirectReportRequest();
+        Map<String,Object> reportRequest = TestUtil.mockDirectReportRequest();
         mockResourceLoaderTasks();
 
         doReturn(new JasperPrint()).when(reportingService).getPrint(any(), any(), any());
@@ -213,7 +212,7 @@ class ReportingServiceImplTest {
     @Test
     void generateDirect_whenLocalNotSupported() throws Exception {
 
-        ObjectNode reportRequest = TestUtil.mockDirectReportRequest();
+        Map<String,Object> reportRequest = TestUtil.mockDirectReportRequest();
 
         when(resourcesLoader.getReport(anyLong())).thenReturn(report);
         when(resourcesLoader.getReport(anyLong())).thenReturn(report);
@@ -230,7 +229,7 @@ class ReportingServiceImplTest {
     @Test
     void generateDirect_whenFailedToLoadImage() throws Exception {
 
-        ObjectNode reportRequest = TestUtil.mockDirectReportRequest();
+        Map<String,Object> reportRequest = TestUtil.mockDirectReportRequest();
         when(resourcesLoader.getReport(anyLong())).thenReturn(report);
         when(resourcesLoader.getImage(anyLong())).thenReturn(null);
 
@@ -251,7 +250,7 @@ class ReportingServiceImplTest {
     @Test
     void generateDirect_whenSuccessful_translationNeeded() throws Exception {
 
-        ObjectNode reportRequest = TestUtil.mockDirectReportRequest();
+        Map<String,Object> reportRequest = TestUtil.mockDirectReportRequest();
         mockResourceLoaderTasks();
 
         doReturn(new JasperPrint()).when(reportingService).getPrint(any(), any(), any());
@@ -280,7 +279,7 @@ class ReportingServiceImplTest {
     @Test
     void generateDirect_whenSuccessful_translationIgnored() throws Exception {
 
-        ObjectNode reportRequest = TestUtil.mockDirectReportRequest();
+        Map<String,Object> reportRequest = TestUtil.mockDirectReportRequest();
         mockResourceLoaderTasks();
 
         doReturn(new JasperPrint()).when(reportingService).getPrint(any(), any(), any());
@@ -301,7 +300,7 @@ class ReportingServiceImplTest {
     @Test
     void generateDirect_whenSuccessful_whenExportException() throws Exception {
 
-        ObjectNode reportRequest = TestUtil.mockDirectReportRequest();
+        Map<String,Object> reportRequest = TestUtil.mockDirectReportRequest();
         mockResourceLoaderTasks();
 
         doReturn(new JasperPrint()).when(reportingService).getPrint(any(), any(), any());

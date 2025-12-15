@@ -5,21 +5,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class GenericResponse<T> {
+public record GenericResponse<T>(@Email
+                                 String message,
+                                 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+                                 Object reason,
+                                 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+                                 T data,
+                                 int code) {
 
-    @Email
-    private String message;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Object reason;
-
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private T data;
-    private int code;
 }

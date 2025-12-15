@@ -1,7 +1,6 @@
 package com.tribune.demo.reporting.controller;
 
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tribune.demo.reporting.error.UnsupportedItemException;
 import com.tribune.demo.reporting.model.ReportExportType;
 import com.tribune.demo.reporting.model.ReportRequest;
@@ -18,8 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 @Slf4j
 @RequestMapping("/reporting")
@@ -44,8 +44,8 @@ public class ReportingController {
         log.info("generateV1() - XThread: {}", Thread.currentThread().getName());
 
 
-        String fileName = String.format("%s%s", "test", new SimpleDateFormat("yyyyMMddhhmmss'." + type.toString().toLowerCase() + "'")
-                .format(new Date()));
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        String fileName = "test_" + timestamp + "." + type.toString().toLowerCase();
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
@@ -56,14 +56,14 @@ public class ReportingController {
     @PostMapping(value = "/v2/generate/{type}", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE,
             MediaType.APPLICATION_PDF_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     @Operation(description = "Generate a report using json object that needs to be converted to a standard json array while also checking for translation.")
-    public ResponseEntity<StreamingResponseBody> generateV2(@Valid @RequestBody ObjectNode reportRequest,
+    public ResponseEntity<StreamingResponseBody> generateV2(@Valid @RequestBody Map<String, Object> reportRequest,
                                                             @PathVariable(value = "type") ReportExportType exportType,
                                                             @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, defaultValue = "EN") String language,
                                                             @RequestParam(defaultValue = "") String reportTitle) throws UnsupportedItemException, JRException {
         log.info("generateV2() - XThread: {}", Thread.currentThread().getName());
 
-        String fileName = String.format("%s%s", "test", new SimpleDateFormat("yyyyMMddhhmmss'." + exportType.toString().toLowerCase() + "'")
-                .format(new Date()));
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        String fileName = "test_" + timestamp + "." + exportType.toString().toLowerCase();
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)

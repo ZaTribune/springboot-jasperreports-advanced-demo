@@ -4,13 +4,13 @@ package com.tribune.demo.reporting.error;
 import com.tribune.demo.reporting.model.GenericResponse;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.commons.lang3.ObjectUtils;
+import org.jspecify.annotations.NonNull;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,7 +33,7 @@ public class RestControllerAdvisor extends ResponseEntityExceptionHandler {
         logger.error(ex.getMessageKey());
         GenericResponse<String> response = GenericResponse.<String>builder()
                 .message(ex.getMessage())
-                .reason(ObjectUtils.defaultIfNull(ex.getCause(), ex).getMessage())
+                .reason(ObjectUtils.getIfNull(ex.getCause(), ex).getMessage())
                 .code(6001)
                 .build();
         return ResponseEntity.badRequest().body(response);
@@ -46,7 +46,7 @@ public class RestControllerAdvisor extends ResponseEntityExceptionHandler {
         logger.error(ex.getMessage());
         GenericResponse<String> response = GenericResponse.<String>builder()
                 .message(ex.getMessage())
-                .reason(ObjectUtils.defaultIfNull(ex.getCause(), ex).getMessage())
+                .reason(ObjectUtils.getIfNull(ex.getCause(), ex).getMessage())
                 .code(6002)
                 .build();
         return ResponseEntity.badRequest().body(response);

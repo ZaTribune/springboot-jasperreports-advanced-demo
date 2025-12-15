@@ -13,12 +13,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.*;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -90,7 +91,7 @@ class ReportingControllerTest {
     @Test
     void testGenerateReportV2_Success() throws Exception {
 
-        ObjectNode reportRequest = objectMapper.createObjectNode();
+        Map<String,Object> reportRequest = new HashMap<>();
         reportRequest.put("key", "value");
         ReportExportType exportType = ReportExportType.PDF;
         String language = "EN";
@@ -98,7 +99,7 @@ class ReportingControllerTest {
 
         StreamingResponseBody mockStream = outputStream -> outputStream.write("Mocked PDF Content".getBytes());
 
-        when(reportingService.generateDirect(reportRequest, reportTitle, language, exportType)).thenReturn(mockStream);
+        when(reportingService.generateDirect(any(), eq(reportTitle), eq(language), eq(exportType))).thenReturn(mockStream);
 
         mockMvc.perform(post("/reporting/v2/generate/{type}", exportType)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -111,13 +112,13 @@ class ReportingControllerTest {
     @Test
     void testGenerateReportV2_UnsupportedItemException() throws Exception {
 
-        ObjectNode reportRequest = objectMapper.createObjectNode();
+        Map<String,Object> reportRequest = new HashMap<>();
         reportRequest.put("key", "value");
 
         String language = "Fr";
         String reportTitle = "Test Report";
 
-        when(reportingService.generateDirect(reportRequest, reportTitle, language, ReportExportType.PDF))
+        when(reportingService.generateDirect(any(), eq(reportTitle), eq(language), eq(ReportExportType.PDF)))
                 .thenThrow(new UnsupportedItemException("Unsupported locale type", "locale", List.of("Ar","En")));
 
 
@@ -133,13 +134,13 @@ class ReportingControllerTest {
     @Test
     void testGenerateReportV2_JRException() throws Exception {
 
-        ObjectNode reportRequest = objectMapper.createObjectNode();
+        Map<String,Object> reportRequest = new HashMap<>();
         reportRequest.put("key", "value");
         ReportExportType exportType = ReportExportType.PDF;
         String language = "EN";
         String reportTitle = "Test Report";
 
-        when(reportingService.generateDirect(reportRequest, reportTitle, language, exportType))
+        when(reportingService.generateDirect(any(), eq(reportTitle), eq(language), eq(exportType)))
                 .thenThrow(new JRException("Error generating report"));
 
 

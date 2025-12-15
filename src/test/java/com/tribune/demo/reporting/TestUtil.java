@@ -1,8 +1,8 @@
 package com.tribune.demo.reporting;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tribune.demo.reporting.db.entity.Report;
 import com.tribune.demo.reporting.db.entity.ReportImage;
 import com.tribune.demo.reporting.db.entity.ReportLocale;
@@ -13,6 +13,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TestUtil {
 
@@ -112,7 +113,7 @@ public class TestUtil {
         return mapper.readValue(json, ReportRequest.class);
     }
 
-    public static ObjectNode mockDirectReportRequest() throws JsonProcessingException {
+    public static Map<String,Object> mockDirectReportRequest() throws JsonProcessingException {
 
         String json = """
                 {
@@ -124,6 +125,6 @@ public class TestUtil {
                     "gender": "male"
                 }
                 """;
-        return mapper.readValue(json, ObjectNode.class);
+        return mapper.readValue(json, new TypeReference<>() {});
     }
 }

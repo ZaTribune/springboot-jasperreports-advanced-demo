@@ -21,6 +21,7 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.json.data.JsonDataSource;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -132,7 +133,7 @@ public class ReportingServiceImpl implements ReportingService {
     }
 
     @Override
-    public StreamingResponseBody generateDirect(ObjectNode reportRequest, String reportTitle, String language,
+    public StreamingResponseBody generateDirect(Map<String,Object> reportRequest, String reportTitle, String language,
                                                 ReportExportType accept) throws JRException {
         log.info("generateDirect() - XThread: {}", Thread.currentThread().getName());
         Map<String, Object> parametersMap = new HashMap<>();
@@ -194,20 +195,20 @@ public class ReportingServiceImpl implements ReportingService {
 
     }
 
-    public List<ReportEntry> prepareEntries(ObjectNode reportRequest, String language) {
+    public List<ReportEntry> prepareEntries(Map<String,Object> reportRequest, String language) {
         List<ReportEntry> entries = new ArrayList<>();
 
-        reportRequest.fields().forEachRemaining(entry -> {
+        reportRequest.forEach((key, value) -> {
 
             ReportEntry reportEntry = new ReportEntry();
             //defaulted to itself
-            String name = messageSource.getMessage(entry.getKey(), null, entry.getKey(), Locale.forLanguageTag(language));
+            String name = messageSource.getMessage(key, null, key, Locale.forLanguageTag(language));
 
-            if (!language.toLowerCase().equals(defaultLanguage) && StringUtils.equals(name, entry.getKey())) {
+            if (!language.toLowerCase().equals(defaultLanguage) && Strings.CI.equals(name, key)) {
                 reportEntry.setTranslate(true);
             }
             reportEntry.setKey(name);
-            reportEntry.setValue(entry.getValue().textValue());
+            reportEntry.setValue((String) value);
             entries.add(reportEntry);
         });
         return entries;

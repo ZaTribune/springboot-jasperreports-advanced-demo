@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
+import org.jspecify.annotations.NonNull;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,7 @@ public class ResourcesLoader implements CommandLineRunner {
 
 
     @Override
-    public void run(String... args) {
+    public void run(String @NonNull ... args) {
         log.info("Loading jasper reports");
         loadReports();
     }
@@ -43,7 +44,6 @@ public class ResourcesLoader implements CommandLineRunner {
     public void loadReports() {
 
         reportRepository.findAll().forEach(report -> {
-            System.out.println("hello");
             //loading the templates
             report.getLocales().forEach(reportLocale -> {
                 try {
